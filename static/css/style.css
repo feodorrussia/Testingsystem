@@ -1,0 +1,317 @@
+/* -------- General styles ---------  */
+body{
+    background-color: #fff;
+}
+
+h1{
+    margin-top: 30px;
+}
+
+h1, h2, h3, h4{
+	color: #fff;
+	font-family: 'Nobel', sans-serif;
+}
+
+p{
+    font-family: 'Nobel', sans-serif;
+    font-size:14px;
+}
+
+/* loader styles*/
+
+#p_prldr{
+position: fixed;
+left: 0;
+top: 0;
+right:0;
+bottom:0;
+background: #fff;
+z-index: 30;}
+
+.contpre{
+width: 100%;
+height: 300px;
+margin: 20vh auto 0 auto;
+color:#fff;}
+
+#p_prldr .svg_anm {
+position:absolute;
+top:51vh;
+left:49vw;
+width: 41px;
+height: 41px;
+background: url(../img/server/prel.svg) center center no-repeat;
+background-size:41px;
+margin: 16px 0 0 -16px;
+}
+
+/* -------- Container's styles ---------  */
+.header{
+    background-color: #ccc;
+    width:100%;
+    position:fixed;
+    top:0;
+    display:flex;
+    z-index:1;
+}
+
+.container-total{
+  background-color: #eee;
+  width: 100%;
+  padding: 50px;
+}
+
+.middle{
+    padding-top:25vh;
+}
+
+.container-main{
+    background-color: #fff;
+    width: 100%;
+    height: max-content;
+    z-index: 2;
+}
+
+.ege{
+    padding: 20px;
+}
+
+.container-social{
+  background-color: #E6E6FA;
+  width: 100%;
+}
+
+.divider{
+	background-image: url('../img/server/divider-pattern.png');
+	background-repeat: repeat-x;
+	height: 4px;
+	width: 100%;
+}
+
+.line{
+    display: inline-block;
+	background-image: url('../img/server/line-pattern.png');
+	background-repeat: repeat-x;;
+	height: 2px;
+	width: 20%;
+}
+.line-yellow{
+    display: inline-block;
+	background-image: url('../img/server/line-pattern-yellow.png');
+	background-repeat: repeat-x;
+	height: 2px;
+	width: 25%;
+}
+
+
+.icon_img{
+    width:96px;
+    height:96px;
+}
+
+.icon{
+    display: inline-block;
+    padding: 30px 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width:25%;
+}
+
+.popup {
+	position: fixed;
+	height:100%;
+	width:100%;
+	top:0;
+	left:0;
+	display:none;
+	text-align:center;
+}
+
+.popup_bg {
+	background:rgba(0,0,0,0.7);
+	position:absolute;
+	z-index:1;
+	height:100%;
+	width:100%;
+}
+
+
+.popup_menu {
+	position: fixed;
+	height:100%;
+	width:100%;
+	top:0;
+	left:0;
+	z-index:1;
+	display:none;
+	text-align:center;
+}
+
+.popup_bg_menu {
+	background:rgba(0,0,0,0.7);
+	position:absolute;
+	z-index:2;
+	height:100%;
+	width:100%;
+}
+
+.menu{
+    background-color: #000;
+    display:block;
+	position: absolute;
+	padding: 0 10vw;
+	right:0;
+	z-index:3;
+	height:100vh;
+	max-width:50%;
+}
+
+/* -------- Page styles ---------  */
+
+#heading{
+    margin-left: auto;
+    margin-right: auto;
+	text-align: center;
+	padding:20px 0;
+}
+
+.row{
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+	padding:10px 0;
+	width:100%;
+}
+
+.central{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+}
+
+/* -------- Footer styles ---------  */
+
+footer{
+	background-color: #1b1b1b;
+	color: #999999;
+}
+
+.footer h1{
+    color: #fff;margin: 0 0; padding-top: 30px;font-size:75px
+}
+
+
+ /* RESPONSIVE CSS
+    -------------------------------------------------- */
+
+    @media (max-width: 979px) {
+        .container-total_stlion{
+            display: block !important;
+            padding-bottom: 20px;
+        }
+        .horse_descr{
+            width: 70vw !important;
+            margin:auto;
+            height:max-content;
+        }
+
+        .horse_photo{
+            margin-top:50px;
+            padding: 0 !important;
+            width: 40vw !important;
+            height: auto !important;
+        }
+        .news_body{
+            display: block;
+        }
+        .news_image{
+            width:100vw;
+        }
+        .title_horse{
+            margin-top:60px !important;
+        }
+        .fadein img{
+            height:50vh !important;
+            width: auto !important;
+        }
+        .img img{
+            height:50vh !important;
+            width: auto !important;
+        }
+        #stallions{
+            height:auto !important;
+        }
+    }
+
+
+    @media (max-width: 770px) {
+        .runner{
+            text-align:center;
+            display:block;
+        }
+        #social li a{
+	        height: 64px;
+	        width: 64px;
+        }
+        .fadein img{
+            width:auto !important;
+            height: 40vw !important;
+        }
+        .img img{
+            width:auto !important;
+            height: 40vw !important;
+        }
+        #stallions{
+            height:50vw !important;
+        }
+        .story_images{
+            display:none;
+        }
+        .story_text{
+            width:100vw;
+        }
+    }
+
+    @media (max-width: 655px) {
+    }
+
+    @media (max-width: 500px) {
+        #stallions{
+            height:auto !important;
+        }
+        .stlion_cont{
+            display:block;
+        }
+        .h1,h1{font-size:8vw !important}.h2,h2{font-size:5vw !important}.h3,h3{font-size:3vw !important}.h4,h4{font-size:2vw !important}.h5,h5{font-size:2vw !important}
+        .person{
+            width: 100%;
+            text-align: center;
+        }
+        .fadein{
+            display:none !important;
+        }
+        #stlions_link{
+            width:100%;
+        }
+        #stlions_link_block{
+            margin: 0 auto;
+            width:max-content;
+        }
+        .container-title{
+            height:50vh;
+        }
+        .container-about{
+            height:50vh;
+        }
+        .icon{
+            padding: 0 0;
+        }
+        .icon_img{
+            width:64px;
+            height:64px;
+        }
+        .middle{
+            padding-top:5vh;
+        }
+    }

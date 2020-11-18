@@ -1,0 +1,38 @@
+{% extends "workpage.html" %}
+
+
+{% block display %}
+    <div class="title" style="background-image: url({{'static/img/user/' + photo.query.filter_by(descr='container-title').first().filename}})" onclick="location.href='/ed_title'"></div>
+    <div class="stallions" style="background-image: url({{'static/img/server/stallions.png'}})" onclick="location.href='/ed_stallion/{{0}}'"></div>
+    <div class="about" style="background-image: url({{'static/img/user/' + photo.query.filter_by(descr='about').first().filename}})" onclick="location.href='/ed_about'">
+        <h6 style="color: #fff;padding-top:20%;">ИСТОРИЯ</h6>
+        <h6 style="color:#ffc000;margin-bottom:20px;">{{data.query.filter_by(name='about').first().descr}}</h6>
+    </div>
+    <div id="gallery" class="gallery" onclick="location.href='/ed_gallery'">
+        <h6 style="display: inline-block;color:#ffc000">
+                ГАЛЕРЕЯ</h6>
+        {% for i in range(3) %}
+        <div style="display:flex;height:5vh;padding:20px 2px;margin:20px 2px" align="center">
+            {% for j in range(3) %}
+            <img id="{{i*3+j+1}}_img" class="image"
+                 src="{{ url_for( 'static', filename='img/user/'+photo.query.filter_by(descr='gallery').all()[i*3+j].filename)}}"/>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+    <div class="news" style="background-image: url({{'static/img/user/' + photo.query.filter_by(descr='news').first().filename}})" onclick="location.href='/ed_block_news'">
+        <h6 style="color: #fff;padding-top:15%;margin-bottom:10px">НОВОСТИ</h6>
+        <h6 style="color:#ffc000;">{{data.query.filter_by(name='news').first().descr}}</h6>
+    </div>
+{% endblock %}
+
+
+{% block tools_block %}
+    {% block tools %}
+    {% endblock %}
+{% endblock %}
+
+
+{% block scripts %}
+
+{% endblock %}
