@@ -16,11 +16,12 @@ class Data(db.Model):
 
 class Universities(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    add_score = db.Column(db.String(80), unique=True, nullable=False)
+    add_score_fl = db.Column(db.String(80), unique=True, nullable=False)
 
 
 class Faculties(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), unique=True, nullable=False)
     university = db.Column(db.String(80), unique=False, nullable=False)
     subjects = db.Column(db.String(80), unique=False, nullable=False)
     passing_score = db.Column(db.Integer, unique=False, nullable=False)

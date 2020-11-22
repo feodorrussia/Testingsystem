@@ -6,6 +6,7 @@ from flask import redirect, render_template, request
 from constants import *
 from db import Admin
 from db import Data
+from db import Faculties
 from little_functions import *
 from login import LoginForm
 
@@ -13,20 +14,23 @@ from login import LoginForm
 @app.route('/', methods=['POST', 'GET'])
 @app.route('/index', methods=['POST', 'GET'])
 def index():
-    edu_org = ["physical and mathematical profile", "information and mathematical profile"]  #
+    faculties = [x.name for x in Faculties.query.all()]  #
     if request.method == 'GET':
-        return render_template('index.html', edu_org=edu_org,
+        return render_template('index.html', faculties=faculties,
                                contacts=information_extractor(Data.query.filter_by(name="contacts").first().descr)[
                                    0].split("\n"))
     elif request.method == 'POST':
-        sel_edu_org = request.form.get('edu_org')
+        sel_faculties = request.form.get('faculties')
         subs = []
         for i in range(4):
-            subs.append(int(request.form.get(f'{i}')))
-        if sel_edu_org == edu_org[0]:  #
-            result = (subs[0] + subs[1] + subs[2]) // 3
-        elif sel_edu_org == edu_org[1]:  #
-            result = (subs[0] + subs[1] + subs[3]) // 3
+            if request.form.get(f'{i}') != "":
+                subs.append(int(request.form.get(f'{i}')))
+            else:
+                subs.append(0)
+        req_subs = Faculties.query.filter_by(name=f'{sel_faculties}').first().subjects.split()
+        result = 0
+        for i in req_subs:
+            result += subs[int(i)]
         return redirect(f"/result/{result}")
 
 
