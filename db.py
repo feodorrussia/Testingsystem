@@ -10,7 +10,7 @@ class Admin(db.Model):
 class Data(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=False, nullable=False)
-    descr = db.Column(db.String(80), unique=False, nullable=False)
+    descr = db.Column(db.String(1200), unique=False, nullable=False)
 
 
 
