@@ -17,7 +17,7 @@
     <meta name="author" content="">
 
     <!-- Styles -->
-    <link href="{{ url_for( 'static', filename='css/style.css')}}?ver=21" rel="stylesheet">
+    <link href="{{ url_for( 'static', filename='css/style.css')}}?ver=27" rel="stylesheet">
     <link href="{{ url_for( 'static', filename='css/bootstrap.min.css')}}?ver=1" rel="stylesheet">
     <style>
       body {
@@ -33,11 +33,29 @@
     <!-- Header -->
     <div class="header">
         <a class="home" href="\index" style="margin:5px 5px 5px 20px"><img
-            src="{{ url_for( 'static', filename='img/server/home_icon.png')}}" height=56 width=56/></a>
-        <h1 style="display:block;margin: 5px auto;align-self:center;padding-right:75px;max-width:60vw">POSTUPIL TEST</h1>
+            src="{{ url_for( 'static', filename='img/server/icon-home.png')}}" height=56 width=56/></a>
+        <h1 style="color: orange;display:block;margin: 5px auto;align-self:center;padding-right:75px;max-width:60vw">POSTUPIL TEST</h1>
         <img class="menu_button" style="display:block;position:absolute;right:32px;margin-top:15px;cursor:pointer"
-            src="{{ url_for( 'static', filename='img/server/menu.png')}}" height=30
+            src="{{ url_for( 'static', filename='img/server/menu1.png')}}" height=30
             width=40/>
+    </div>
+
+    <!-- Preloader items  -->
+    <div id="p_prldr">
+        <div class="contpre" align="center">
+            <h1 style="color:#000;align-self:center;height:auto;width:400px;max-width:95vw;">POSTUPIL TEST</h1>
+            <span class="svg_anm"></span>
+        </div>
+    </div>
+
+    <!-- Menu items  -->
+    <div class="popup_menu">
+        <div class="popup_bg_menu"></div>
+        <div class="menu">
+            <a style="color:orange;" href="\index"><h2 style="margin-top:100px;">ГЛАВНАЯ</h2></a>
+            <div class="line-yellow"></div>
+            <a style="color:#fff" href="#social"><h2 class="contacts">РЕГИСТРАЦИЯ</h2></a>
+        </div>
     </div>
 
     {% block content %}{% endblock %}
