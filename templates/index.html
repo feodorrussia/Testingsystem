@@ -7,56 +7,39 @@
 
 
 {% block content %}
-<!-- Preloader items  -->
-<div id="p_prldr">
-    <div class="contpre" align="center">
-        <h1 style="color:#000;align-self:center;height:auto;width:400px;max-width:95vw;">POSTUPIL TEST</h1>
-        <span class="svg_anm"></span>
-    </div>
-</div>
-
-
-<!-- Menu items  -->
-<div class="popup_menu">
-    <div class="popup_bg_menu"></div>
-    <div class="menu">
-        <a style="color:orange;" href="\index"><h2 style="margin-top:100px;">ГЛАВНАЯ</h2></a>
-        <div class="line-yellow"></div>
-        <a style="color:#fff" href="#social"><h2 class="contacts">РЕГИСТРАЦИЯ</h2></a>
-    </div>
-</div>
 
 <!-- Page items -->
 <div class="container-total">
     <div class="container-main">
         <form method="post" enctype="multipart/form-data">
-            <div class="ege">
-                <h4 style="color: #000; padding-bottom: 10px">Select your education profile</h4>
-                <select class="form-control" id="edu_org" name="faculties" style="width: max-content; padding-top: 10px">
-                    <option>-</option>
-                    {%for i in faculties%}
-                        <option>{{i}}</option>
-                    {%endfor%}
-                </select>
+            <h4 style="color: #000; padding: 30px 0 10px 20px">Select your education profile</h4>
+            <div class="edu_org">
+                <div class="bg_edu" style="display: flex;">
+                    <p style="display: inline-block;padding-left:20px; padding-right:15vw;margin:0"><input style="margin-top:112px;" name="mode" type="radio" value="recommend" checked> Recommendation</p>
+                    <div class="edu_org">
+                        <p style="display: inline-block;padding:0 10px;margin:0"><input style="margin-top:112px;" name="mode" type="radio" value="manual"> Manual selection</p>
+                        <div>
+                            {%for i in col_edu%}
+                                <select class="form-control" id=f"edu_org_{{i}}" name="faculties_{{i}}" style="width: max-content;margin:10px;">
+                                    <option>-</option>
+                                    {%for i in faculties%}
+                                        <option>{{i}}</option>
+                                    {%endfor%}
+                                </select>
+                            {%endfor%}
+                        </div>
+                    </div>
+                </div>
             </div>
+            <div class="line-yellow" style="width: 90%; margin-left: 5%"></div>
             <div class="ege">
                 <h4 style="color: #000;margin: 0 20px 20px 0">Your EGE scores:</h4>
-                <div style="display:flex">
-                    <p style="padding: 15px 0 0 10px;width:100px">Russian language</p>
-                    <input class="form-control" style="align-self:right;margin :10px 0 10px 10px;width:300px;" name="0" autocomplete="off" id="1" placeholder="Russian language">
-                </div>
-                <div style="display:flex">
-                    <p style="padding: 15px 0 0 10px;width:100px">Math</p>
-                    <input class="form-control" style="margin :10px 0 10px 10px;width:300px;" name="1" autocomplete="off" id="2" placeholder="Math">
-                </div>
-                <div style="display:flex">
-                    <p style="padding: 15px 0 0 10px;width:100px">Physics</p>
-                    <input class="form-control" style="margin :10px 0 10px 10px;width:300px;" name="2" autocomplete="off" id="3" placeholder="Physics">
-                </div>
-                <div style="display:flex">
-                    <p style="padding: 15px 0 0 10px;width:100px">Informatics</p>
-                    <input class="form-control" style="margin :10px 0 10px 10px;width:300px;" name="3" autocomplete="off" id="4" placeholder="Informatics">
-                </div>
+                {%for i in subs%}
+                    <div style="display:flex">
+                        <p style="padding: 15px 0 0 10px;width:100px">{{i}}</p>
+                        <input class="form-control" style="align-self:right;margin :10px 0 10px 10px;width:300px;" name="{{i}}" autocomplete="off" id="1" placeholder="{{i}}">
+                    </div>
+                {%endfor%}
             </div>
             <button type="submit" class="btn btn-primary" style="margin:20px">Analyze</button>
         </form>
