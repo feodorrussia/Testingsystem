@@ -15,30 +15,57 @@ from login import LoginForm
 @app.route('/index', methods=['POST', 'GET'])
 def index():
     faculties = [x.name for x in Faculties.query.all()]  #
+    sub = Data.query.filter_by(name="subs").first().descr.split("; ")
     if request.method == 'GET':
-        return render_template('index.html', faculties=faculties,
-                               contacts=information_extractor(Data.query.filter_by(name="contacts").first().descr)[
+        return render_template('index.html', faculties=faculties, col_edu=[1, 2, 3, 4, 5], subs=sub,
+                               contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
                                    0].split("\n"))
     elif request.method == 'POST':
-        sel_faculties = request.form.get('faculties')
         subs = []
-        for i in range(4):
+        for i in sub:
             if request.form.get(f'{i}') != "":
                 subs.append(int(request.form.get(f'{i}')))
             else:
                 subs.append(0)
-        req_subs = Faculties.query.filter_by(name=f'{sel_faculties}').first().subjects.split()
-        result = 0
-        for i in req_subs:
-            result += subs[int(i)]
-        return redirect(f"/result/{result}")
+        if request.form.get('mode') == "manual":
+            sel_faculties = []
+            for i in range(1, 6):
+                sel_faculties.append(request.form.get(f'faculties_{i}'))
+            results = {}
+            for sel_faculty in sel_faculties:
+                if sel_faculty != "-":
+                    fac = Faculties.query.filter_by(name=f'{sel_faculty}').first()
+                    if fac and fac.id not in results.keys():
+                        req_subs = fac.subjects.split()
+                        result = 0
+                        for i in req_subs:
+                            result += subs[int(i)]
+                        results[fac.id] = result
+            req = Data(name="req", descr="; ".join([str(k) + " " + str(r) for k, r in results.items()]))
+            db.session.add(req)
+            db.session.commit()
+            id_req = req.id
+            return redirect(f"/result/{id_req}")
+        else:
+            result = sum(subs)
+            return redirect(f"/result_rec/{result}")
 
 
-@app.route('/')
-@app.route('/result/<int:result>')
-def result(result):
-    return render_template('result.html', result=result,
-                           contacts=information_extractor(Data.query.filter_by(name="contacts").first().descr)[0].split(
+@app.route('/result/<int:id_req>')
+def result(id_req):
+    sub = Data.query.filter_by(name="subs").first().descr.split("; ")
+    req = Data.query.filter_by(id=f'{id_req}').first()
+    result = [list(map(int, x.split())) for x in req.descr.split("; ")]
+    return render_template('result.html', result=result, facts=Faculties(), sub=sub,
+                           contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
+                               0].split("\n"))
+
+
+@app.route('/result_rec/<int:result>')
+def result_rec(result):  #
+    return render_template('result_rec.html', result=result,
+                           contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
+                               0].split(
                                "\n"))
 
 
