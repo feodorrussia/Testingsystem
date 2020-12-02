@@ -9,10 +9,25 @@
 {% block content %}
 <!-- Page items -->
 <div class="container-total">
-    <div class="container-main">
-        <h2 style="padding: 30px 10px 10px 20px">Your total score: {{result}}</h2>
-        <h2 style="margin: 10px 10px 10px 20px">Your average score: {{result//3}}</h2>
-        <a style="color:#00f" href="/"><h3 style="padding: 0 0 20vh 40vh">Main page</h3></a>
+    <div class="container-main" style="background-color:#000;margin: 10px 0;">
+        <h1 align="center" style="color:orange;padding: 25px 30vw; margin: 0">Our recommendations</h1>
+        <h2 align="center" style="color:#fff;">Your total score: {{result}}</h2>
+        <h2 align="center" style="color:#fff;padding-bottom: 15px">Your average score: {{result//3}}</h2>
+        {% for i in faculties %}
+        <div class="container-main" style="margin: 10px 10px; display: flex; width: auto">
+            <div style="width: 30vw">
+                <h2 style="padding: 20px 10px 10px 20px; margin: 0">Your total score: #</h2>
+                <h2 style="padding: 10px 10px 10px 20px; margin: 0">Your average score: #</h2>
+            </div>
+            <h2 align="center" style="width: 25vw;align-self: center;padding: 30px 3vw; margin: 0">{{facts.query.filter_by(name=i).first().name}}</h2>
+            <h2 align="center" style="width: 13vw;align-self: center;padding: 30px 3vw; margin: 0">{{facts.query.filter_by(name=i).first().university}}</h2>
+            <div style="width: 10vw;display: flex">
+                <h2 align="center" style="align-self: center;color:#f80000;padding: 30px 2vw; margin: 0">{{facts.query.filter_by(name=i).first().subjects}}</h2>
+            </div>
+            <h2 align="center" style="align-self: center;width: 8vw;color:#009900;padding: 30px 3vw; margin: 0">{{facts.query.filter_by(name=i).first().passing_score}}</h2>
+        </div>
+    {% endfor %}
+    <a style="color:orange" href="/"><h3 style="padding: 0 0 20vh 3vw">Main page</h3></a>
     </div>
 
 </div>
