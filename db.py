@@ -21,9 +21,10 @@ class Universities(db.Model):
 
 class Faculties(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), unique=True, nullable=False)
-    university = db.Column(db.String(80), unique=False, nullable=False)
+    name = db.Column(db.String(240), unique=True, nullable=False)
+    university = db.Column(db.String(120), unique=False, nullable=False)
     subjects = db.Column(db.String(80), unique=False, nullable=False)
+    limit_scores = db.Column(db.String(80), unique=False, nullable=False)
     passing_score = db.Column(db.Integer, unique=False, nullable=False)
 
 db.create_all()
