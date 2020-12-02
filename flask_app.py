@@ -27,10 +27,12 @@ def index():
                 subs.append(int(request.form.get(f'{i}')))
             else:
                 subs.append(0)
-        if request.form.get('mode') == "manual":
-            sel_faculties = []
-            for i in range(1, 6):
-                sel_faculties.append(request.form.get(f'faculties_{i}'))
+        sel_faculties = []
+        for i in range(1, 6):
+            f = request.form.get(f'faculties_{i}')
+            if f in faculties:
+                sel_faculties.append(f)
+        if request.form.get('mode') == "manual" and sel_faculties != []:
             results = {}
             for sel_faculty in sel_faculties:
                 if sel_faculty != "-":
@@ -63,7 +65,8 @@ def result(id_req):
 
 @app.route('/result_rec/<int:result>')
 def result_rec(result):  #
-    return render_template('result_rec.html', result=result,
+    faculties = [x.name for x in Faculties.query.all()]
+    return render_template('result_rec.html', result=result, faculties=faculties, facts=Faculties(),
                            contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
                                0].split(
                                "\n"))
