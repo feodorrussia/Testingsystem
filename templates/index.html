@@ -17,15 +17,18 @@
                 <div class="bg_edu" style="display: flex;">
                     <p style="display: inline-block;padding-left:20px; padding-right:15vw;margin:0"><input style="margin-top:112px;" name="mode" type="radio" value="recommend" checked> Recommendation</p>
                     <div class="edu_org">
-                        <p style="display: inline-block;padding:0 10px;margin:0"><input style="margin-top:112px;" name="mode" type="radio" value="manual"> Manual selection</p>
+                        <p style="display: inline-block;padding:0 10px;margin:0"><input style="margin-top:112px;" name="mode" type="radio" value="manual" onclick="this.form.faculties_1.disabled=0;
+                        this.form.faculties_2.disabled=0;this.form.faculties_3.disabled=0;this.form.faculties_4.disabled=0;this.form.faculties_5.disabled=0;"
+                        onreset="this.form.faculties_1.disabled=1;
+                        this.form.faculties_2.disabled=1;this.form.faculties_3.disabled=1;this.form.faculties_4.disabled=1;this.form.faculties_5.disabled=1;"> Manual selection</p>
                         <div>
                             {%for i in col_edu%}
-                                <select class="form-control" id=f"edu_org_{{i}}" name="faculties_{{i}}" style="width: max-content;margin:10px;">
-                                    <option>-</option>
-                                    {%for i in faculties%}
-                                        <option>{{i}}</option>
+                                <input class="form-control" type="text" list="faculties" style="align-self:right;margin :10px 0 10px 10px;width:300px;" name="faculties_{{i}}" autocomplete="off" id="1" placeholder="-" disabled>
+                                <datalist id="faculties">
+                                    {% for j in faculties%}
+                                    <option>{{j}}</option>
                                     {%endfor%}
-                                </select>
+                                </datalist>
                             {%endfor%}
                         </div>
                     </div>
@@ -37,7 +40,7 @@
                 {%for i in subs%}
                     <div style="display:flex">
                         <p style="padding: 15px 0 0 10px;width:100px">{{i}}</p>
-                        <input class="form-control" style="align-self:right;margin :10px 0 10px 10px;width:300px;" name="{{i}}" autocomplete="off" id="1" placeholder="{{i}}">
+                        <input class="form-control" type="number" max="100" min="0" style="align-self:right;margin :10px 0 10px 10px;width:300px;" name="{{i}}" autocomplete="off" id="{{i}}" placeholder="{{i}}">
                     </div>
                 {%endfor%}
             </div>
