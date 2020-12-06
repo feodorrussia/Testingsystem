@@ -57,7 +57,7 @@ def index():
 def result(id_req):
     sub = Data.query.filter_by(name="subs").first().descr.split("; ")
     req = Data.query.filter_by(id=f'{id_req}').first()
-    result = [list(map(int, x.split())) for x in req.descr.split("; ")]
+    result = sorted([list(map(int, x.split())) for x in req.descr.split("; ")], key=lambda x: -int(x[1]))
     return render_template('result.html', result=result, facts=Faculties(), sub=sub,
                            contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
                                0].split("\n"))
@@ -66,6 +66,7 @@ def result(id_req):
 @app.route('/result_rec/<int:result>')
 def result_rec(result):  #
     faculties = [x.name for x in Faculties.query.all()]
+    print(faculties)
     return render_template('result_rec.html', result=result, faculties=faculties, facts=Faculties(),
                            contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
                                0].split(
