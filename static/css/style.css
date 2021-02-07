@@ -72,6 +72,13 @@ margin: 16px 0 0 -16px;
     z-index: 2;
 }
 
+.container-flash{
+    background-color: #fff;
+    width: 100%;
+    height: max-content;
+    z-index: 2;
+}
+
 .ege{
     padding: 20px;
 

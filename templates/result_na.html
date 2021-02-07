@@ -18,9 +18,9 @@
             <h2 align="center" style="width: 27vw;align-self: center;padding: 30px 1vw; margin: 0 10px">Название факультета</h2>
             <h2 align="center" style="width: 21vw;align-self: center;padding: 30px 1vw; margin: 0">Название университа</h2>
             <div style="width: 12vw;display: flex">
-                <h4 align="center" style="align-self: center;color:#f80000;padding: 30px 1vw; margin: 0">Предметы ЕГЭ</h4>
+                <h4 align="center" style="align-self: center;padding: 30px 1vw; margin: 0">Предметы ЕГЭ</h4>
             </div>
-            <h4 align="center" style="align-self: center;width: 12vw;color:#009900;padding: 30px 1vw; margin: 0">Проходной балл</h4>
+            <h4 align="center" style="align-self: center;width: 12vw;padding: 30px 1vw; margin: 0">Проходной балл</h4>
         </div>
         {% for i in result %}
         <div class="container-main" style="margin: 10px 10px; display: flex; width: auto">
@@ -29,14 +29,26 @@
                 <h3 style="padding: 10px 10px 20px 20px; margin: 0">Ваш средний балл: {{i[1]//3}}</h3>
             </div>
             <h2 align="center" style="width: 24vw;align-self: center;padding: 30px 3vw; margin: 0">{{facts.query.filter_by(id=i[0]).first().name}}</h2>
-            <h2 align="center" style="width: 20vw;align-self: center;padding: 30px 3vw; margin: 0">{{facts.query.filter_by(id=i[0]).first().university}}</h2>
-            <div style="width: 10vw;display: flex">
-                <h2 align="center" style="align-self: center;color:#f80000;padding: 30px 2vw; margin: 0">{{facts.query.filter_by(id=i[0]).first().subjects}}</h2>
+            <h2 align="center" style="width: 20vw;align-self: center;padding: 30px 3vw; margin: 0">{{uni[facts.query.filter_by(id=i[0]).first().id_uni - 1]}}</h2>
+            <div style="width: 10vw;padding: 30px 1vw;display: flex">
+                {% for score in sub_comb[facts.query.filter_by(id=i[0]).first().subjects] %}
+                    {% if score[0]=="g" %}
+                        <h2 align="center" style="align-self: center;color:#009900;padding-right: 10%; margin: 0">{{score[1:]}}</h2>
+                    {% endif %}
+                    {% if score[0]=="r" %}
+                        <h2 align="center" style="align-self: center;color:#f80000;padding-right: 10%; margin: 0">{{score[1:]}}</h2>
+                    {% endif %}
+                {% endfor %}
             </div>
-            <h2 align="center" style="align-self: center;width: 10vw;color:#009900;padding: 30px 3vw; margin: 0">{{facts.query.filter_by(id=i[0]).first().passing_score}}</h2>
+                {% if facts.query.filter_by(id=i[0]).first().passing_score <= i[1] %}
+                    <h2 align="center" style="align-self: center;width: 10vw;color:#009900;padding: 30px 3vw; margin: 0">{{facts.query.filter_by(id=i[0]).first().passing_score}}</h2>
+                {% endif %}
+                {% if facts.query.filter_by(id=i[0]).first().passing_score > i[1] %}
+                    <h2 align="center" style="align-self: center;width: 10vw;color:#f80000;padding: 30px 3vw; margin: 0">{{facts.query.filter_by(id=i[0]).first().passing_score}}</h2>
+                {% endif %}
         </div>
     {% endfor %}
-    <a style="color:orange" href="/"><h3 style="padding: 0 0 20vh 3vw">Main page</h3></a>
+    <a style="color:orange" href="/"><h3 style="padding: 0 0 20vh 3vw">Главная</h3></a>
     </div>
 
 </div>

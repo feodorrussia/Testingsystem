@@ -7,21 +7,29 @@ from constants import *
 from db import Admin
 from db import Data
 from db import Faculties
+from db import Individual_achivements
+from db import Universities as Uni
+from db import University_Ach
+from db import University_Sub
 from little_functions import *
 from login import LoginForm
+
+sub_combs = {}
 
 
 @app.route('/', methods=['POST', 'GET'])
 @app.route('/index', methods=['POST', 'GET'])
 def index():
     faculties = [x.name for x in Faculties.query.all()]  #
-    sub = Data.query.filter_by(name="subs").first().descr.split("; ")
+    sub = Data.query.filter_by(name="subs").first().descr.split("; ")[1:]
     if request.method == 'GET':
         return render_template('index.html', faculties=faculties, col_edu=[1, 2, 3, 4, 5], subs=sub,
                                contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
                                    0].split("\n"))
     elif request.method == 'POST':
-        subs = []
+        subs = [0]
+        global sub_combs
+        sub_combs = {}
         for i in sub:
             if request.form.get(f'{i}') != "":
                 subs.append(int(request.form.get(f'{i}')))
@@ -37,40 +45,117 @@ def index():
             for sel_faculty in sel_faculties:
                 if sel_faculty != "-":
                     fac = Faculties.query.filter_by(name=f'{sel_faculty}').first()
+                    fl = False
                     if fac and fac.id not in results.keys():
                         req_subs = fac.subjects.split()
                         result = 0
                         for i in req_subs:
-                            result += subs[int(i)]
-                        results[fac.id] = result
-            req = Data(name="req", descr="; ".join([str(k) + " " + str(r) for k, r in results.items()]))
+                            ege_score = subs[int(i)]
+                            limit_score = University_Sub.query.filter_by(id_uni=fac.id_uni).filter_by(
+                                id_sub=i).first().limit_score
+                            if limit_score <= ege_score:
+                                score = f"g{sub[int(i)-1][0]}"
+                                fl =True
+                            elif fl:
+                                score = f"r{sub[int(i)-1][0]}"
+                            if fac.subjects not in sub_combs.keys():
+                                sub_combs[fac.subjects] = [score]
+                            else:
+                                sub_combs[fac.subjects].append(score)
+                            result += ege_score
+                        results[fac.id] = [str(result)]
+            fl = "0"
+            if request.form.get('mode_achieve') == "ind_achieve":
+                fl = "1"
+                individual_achievements = [x.strip().lower() for x in request.form.get('ind_achieve').split("\n")]
+                for fac_id in results.keys():
+                    if len(results[fac_id]) == 1:
+                        results[fac_id].append("0")
+                    uni = Faculties.query.filter_by(id=fac_id).first().id_uni
+                    print(sorted(University_Ach.query.filter_by(id_uni=uni).all(), key=lambda x: -x.point))
+                    for ind_ach in sorted(University_Ach.query.filter_by(id_uni=uni).all(), key=lambda x: -x.point):
+                        id_ach, point = ind_ach.id_ach, ind_ach.point
+                        ach = Individual_achivements.query.filter_by(id=id_ach).first().name
+                        if ach.lower() in individual_achievements:
+                            if int(results[fac_id][1]) + int(point) <= 10:
+                                results[fac_id][1] = str(int(results[fac_id][1]) + int(point))
+                            else:
+                                results[fac_id][1] = str(max(int(results[fac_id][1]), int(point)))
+                            results[fac_id].append(str(id_ach))
+            req = Data(name="req",
+                       descr=fl + "; ".join([str(k) + " " + " ".join(r) for k, r in results.items()]))
             db.session.add(req)
             db.session.commit()
             id_req = req.id
             return redirect(f"/result/{id_req}")
         else:
-            result = sum(subs)
-            return redirect(f"/result_rec/{result}")
+            results = {}
+            for fac in Faculties.query.all():
+                fl = False
+                if fac and fac.id not in results.keys():
+                    req_subs = fac.subjects.split()
+                    result = 0
+                    for i in req_subs:
+                        ege_score = subs[int(i)]
+                        limit_score = University_Sub.query.filter_by(id_uni=fac.id_uni).filter_by(
+                            id_sub=i).first().limit_score
+                        if limit_score <= ege_score:
+                            score = f"g{sub[int(i)-1][0]}"
+                        else:
+                            score = f"r{sub[int(i)-1][0]}"
+                        if fac.subjects not in sub_combs.keys():
+                            sub_combs[fac.subjects] = [score]
+                            fl = True
+                        elif fl:
+                            sub_combs[fac.subjects].append(score)
+                        result += ege_score
+                    results[fac.id] = [str(result)]
+            fl = "0"
+            if request.form.get('mode_achieve') == "ind_achieve":
+                fl = "1"
+                individual_achievements = [x.strip().lower() for x in request.form.get('ind_achieve').split("\n")]
+                for fac_id in results.keys():
+                    if len(results[fac_id]) == 1:
+                        results[fac_id].append("0")
+                    uni = Faculties.query.filter_by(id=fac_id).first().id_uni
+                    for ind_ach in sorted(University_Ach.query.filter_by(id_uni=uni).all(), key=lambda x: -x.point):
+                        id_ach, score = ind_ach.id_ach, ind_ach.point
+                        ach = Individual_achivements.query.filter_by(id=id_ach).first().name
+                        if ach.lower() in individual_achievements:
+                            if int(results[fac_id][1]) + int(score) <= 10:
+                                results[fac_id][1] = str(int(results[fac_id][1]) + int(score))
+                            else:
+                                results[fac_id][1] = str(max(int(results[fac_id][1]), int(score)))
+                            results[fac_id].append(str(id_ach))
+            req = Data(name="req",
+                       descr=fl + "; ".join([str(k) + " " + " ".join(r) for k, r in results.items()]))
+            db.session.add(req)
+            db.session.commit()
+            id_req = req.id
+            return redirect(f"/result/{id_req}")
 
 
 @app.route('/result/<int:id_req>')
 def result(id_req):
+    global sub_combs
     sub = Data.query.filter_by(name="subs").first().descr.split("; ")
-    req = Data.query.filter_by(id=f'{id_req}').first()
-    result = sorted([list(map(int, x.split())) for x in req.descr.split("; ")], key=lambda x: -int(x[1]))
-    return render_template('result.html', result=result, facts=Faculties(), sub=sub,
-                           contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
-                               0].split("\n"))
+    req = Data.query.filter_by(id=f'{id_req}').first().descr
+    uni = [x.name for x in Uni.query.all()]
+    if req[0] == "1":
+        result = sorted([list(map(int, i.split())) for i in req[1:].split("; ")], key=lambda x: -int(x[1]))
+        print(result)
+        return render_template('result_wia.html', result=result, facts=Faculties(), sub=sub, uni=uni,
+                               sub_comb=sub_combs,
+                               ind_ach=Individual_achivements(), uni_ach=University_Ach(), uni_sub=University_Sub(),
+                               contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
+                                   0].split("\n"))
+    else:
+        result = sorted([list(map(int, x.split())) for x in req[1:].split("; ")], key=lambda x: -int(x[1]))
+        print(result)
+        return render_template('result_na.html', result=result, facts=Faculties(), sub=sub, uni=uni, sub_comb=sub_combs,
+                               contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
+                                   0].split("\n"))
 
-
-@app.route('/result_rec/<int:result>')
-def result_rec(result):  #
-    faculties = [x.name for x in Faculties.query.all()]
-    print(faculties)
-    return render_template('result_rec.html', result=result, faculties=faculties, facts=Faculties(),
-                           contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
-                               0].split(
-                               "\n"))
 
 
 @app.route('/login', methods=['POST', 'GET'])

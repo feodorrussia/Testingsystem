@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+<title>POSTUPIL TEST</title>
+{% endblock %}
+
+
+{% block content %}
+<!-- Page items -->
+<div class="container-total">
+    <div class="container-main" style="background-color:#000;margin: 10px 0;">
+        <h1 align="center" style="align-self: center;color:orange;padding: 20px 30vw; margin: 0">Ваши результаты</h1>
+        <div class="container-main" style="margin: 10px 10px; display: flex; width: auto">
+            <div style="align-self: center;width: 27vw">
+                <h2 align="center" style="align-self: center;padding: 10px 10px 10px 20px; margin: 0">Ваши баллы</h2>
+            </div>
+            <h2 align="center" style="width: 27vw;align-self: center;padding: 30px 1vw; margin: 0 10px">Название факультета</h2>
+            <h2 align="center" style="width: 21vw;align-self: center;padding: 30px 1vw; margin: 0">Название университа</h2>
+            <div style="width: 12vw;display: flex">
+                <h4 align="center" style="align-self: center;padding: 30px 1vw; margin: 0">Предметы ЕГЭ</h4>
+            </div>
+            <h4 align="center" style="align-self: center;width: 12vw;padding: 30px 1vw; margin: 0">Проходной балл</h4>
+        </div>
+        {% for i in result %}
+        <div class="container-main" style="margin: 10px 10px; width: auto">
+            <div style="display: flex;">
+                <div style="width: 25vw">
+                    <h3 style="padding: 20px 10px 10px 20px; margin: 0">Ваш общий балл: {{i[1]+i[2]}}</h3>
+                    <h3 style="padding: 10px 10px 20px 20px; margin: 0">Ваш средний балл: {{(i[1]+i[2])//3}}</h3>
+                </div>
+                <h2 align="center" style="width: 24vw;align-self: center;padding: 30px 3vw; margin: 0">{{facts.query.filter_by(id=i[0]).first().name}}</h2>
+                <h2 align="center" style="width: 20vw;align-self: center;padding: 30px 3vw; margin: 0">{{uni[facts.query.filter_by(id=i[0]).first().id_uni - 1]}}</h2>
+                <div style="width: 10vw;padding: 30px 1vw;display: flex">
+                    {% for score in sub_comb[facts.query.filter_by(id=i[0]).first().subjects] %}
+                        {% if score[0]=="g" %}
+                            <h2 align="center" style="align-self: center;color:#009900;padding-right: 10%; margin: 0">{{score[1:]}}</h2>
+                        {% endif %}
+                        {% if score[0]=="r" %}
+                            <h2 align="center" style="align-self: center;color:#f80000;padding-right: 10%; margin: 0">{{score[1:]}}</h2>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% if facts.query.filter_by(id=i[0]).first().passing_score <= i[1]+i[2] %}
+                    <h2 align="center" style="align-self: center;width: 10vw;color:#009900;padding: 30px 3vw; margin: 0">{{facts.query.filter_by(id=i[0]).first().passing_score}}</h2>
+                {% endif %}
+                {% if facts.query.filter_by(id=i[0]).first().passing_score > i[1]+i[2] %}
+                    <h2 align="center" style="align-self: center;width: 10vw;color:#f80000;padding: 30px 3vw; margin: 0">{{facts.query.filter_by(id=i[0]).first().passing_score}}</h2>
+                {% endif %}
+            </div>
+            <a href="javascript:void(0)" onclick="my_f('{{i[0]}}')">
+                <div class="line-button" style="margin: 10px 10px; padding-bottom: 10px; display: flex; width: auto">
+                    <div class="line-yellow" style="margin: 0 auto; width: 70vw"></div>
+                </div>
+            </a>
+            <div id = "{{i[0]}}" class="container-flash" style="margin: 10px 10px; width: auto;padding-bottom: 20px; display:none">
+                <div class="container-main" style="margin: 0px 10px; width: auto;background-color: #ddd">
+                    <h3 style="padding: 20px 10px 20px 20px; margin: 0">Ваш дополнительный балл: {{i[2]}}*</h3>
+                    <div class="line-button" style="margin: 0px 10px; display: flex; width: auto">
+                        <div class="line" style="margin: 0 auto; width: 60%"></div>
+                    </div>
+                    <div style="display: flex;">
+                        <div style="align-self: center;width: 30vw">
+                            <h2 align="center" style="align-self: center;padding: 10px 10px 10px 20px; margin: 0">Индивидуальное достижение</h2>
+                        </div>
+                        <h2 align="center" style="width: 60vw;align-self: center;padding: 30px 1vw; margin: 0 10px">Описание</h2>
+                        <h2 align="center" style="align-self: center;width: 12vw;padding: 30px 1vw; margin: 0">Балл</h2>
+                    </div>
+                </div>
+                {% for j in i[3:] %}
+                    <div class="container-main" style="margin: 10px 10px; display: flex; width: auto;background-color: #ddd">
+                        <div style="align-self: center;width: 30vw">
+                            <h2 align="center" style="align-self: center;padding: 10px 10px 10px 20px; margin: 0">{{ind_ach.query.filter_by(id=j).first().name}}</h2>
+                        </div>
+                        <h3 align="center" style="width: 60vw;align-self: center;padding: 30px 1vw; margin: 0 10px">{{ind_ach.query.filter_by(id=j).first().descr + " " + uni_ach.query.filter_by(id_ach=j).filter_by(id_uni=facts.query.filter_by(id=i[0]).first().id_uni).first().descr}}</h3>
+                        <h2 align="center" style="align-self: center;width: 12vw;padding: 30px 1vw; margin: 0">{{uni_ach.query.filter_by(id_ach=j).filter_by(id_uni=facts.query.filter_by(id=i[0]).first().id_uni).first().point}}</h2>
+                    </div>
+                {% endfor %}
+            <div class="line-button" style="margin: 0px 10px; padding-top: 5px; display: flex; width: auto">
+                <div class="line-yellow" style="margin: 0 auto; width: 70vw"></div>
+            </div>
+            </div>
+        </div>
+    {% endfor %}
+    <a style="color:orange" href="/"><h3 style="padding: 0 0 20vh 3vw">Главная</h3></a>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+function my_f(objName) {
+    var object = document.getElementById(objName);
+    object.style.display == 'none' ? object.style.display = 'block' : object.style.display = 'none'
+}
+</script>
+{% endblock %}
