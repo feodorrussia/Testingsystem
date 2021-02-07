@@ -12,7 +12,7 @@
 <div class="container-total">
     <div class="container-main">
         <form method="post" enctype="multipart/form-data">
-            <h4 style="color: #000; padding: 30px 0 10px 20px">Введите Ваш ВУЗ и факультет или выберите рекомендации, чтобы получить наши топ ВУЗов для поступления</h4>
+            <h4 style="color: #000; padding: 30px 0 10px 20px">Введите Ваш ВУЗ и факультет или выберите рекомендации, чтобы получить наш топ ВУЗ-ов для поступления</h4>
             <div class="edu_org">
                 <div class="bg_edu" style="display: flex;">
                     <p style="display: inline-block;padding-left:20px; padding-right:10vw;margin:0"><input style="margin-top:112px;" name="mode" type="radio" value="recommend" checked> Рекомендации</p>
@@ -44,7 +44,24 @@
                     </div>
                 {%endfor%}
             </div>
-            <button type="submit" class="btn btn-primary" style="margin:20px">Analyze</button>
+            <div class="line-yellow" style="width: 90%; margin-left: 5%"></div>
+            <div class="ege">
+                <div style="margin: 0 20px 20px 0">
+                    <h4 style="color: #000;">Введите Ваши индивидуальные достижения(ИД):</h4>
+                    <h4 style="color: #000;">help button</h4>
+                </div>
+                <div class="bg_edu" style="display: flex;">
+                    <p style="display: inline-block;padding-left:20px; padding-right:10vw;margin:0"><input style="margin-top:112px;" name="mode_achieve" type="radio" value="no_ind_achieve" checked> Без ИД</p>
+                    <div class="edu_org">
+                        <p style="display: inline-block;padding:0 10px;margin:0;width: max-content; max-width: 20pw">
+                            <input style="margin-top:112px;" name="mode_achieve" type="radio" value="ind_achieve" onclick="this.form.ind_achieve.disabled=0;" onreset="this.form.ind_achieve.disabled=1;">
+                            Ввести ИД
+                        </p>
+                        <textarea name="ind_achieve" rows="12" style="align-self:right;margin :10px 0 10px 10px;width:max-content;min-width:450px;" disabled></textarea>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin:20px">Анализировать</button>
         </form>
     </div>
 
