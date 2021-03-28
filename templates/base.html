@@ -17,7 +17,7 @@
     <meta name="author" content="">
 
     <!-- Styles -->
-    <link href="{{ url_for( 'static', filename='css/style.css')}}?ver=27" rel="stylesheet">
+    <link href="{{ url_for( 'static', filename='css/style.css')}}?ver=40" rel="stylesheet">
     <link href="{{ url_for( 'static', filename='css/bootstrap.min.css')}}?ver=1" rel="stylesheet">
     <style>
       body {
@@ -54,9 +54,9 @@
         <div class="menu">
             <a style="color:orange;" href="\index"><h2 style="margin-top:100px;">ГЛАВНАЯ</h2></a>
             <div class="line-yellow"></div>
-###         <a style="color:#fff;" href="\index"><h2>О ПРОЕКТЕ</h2></a>
+            <a style="color:#fff;" href="\about_us"><h2>О ПРОЕКТЕ</h2></a>
             <div class="line-yellow"></div>
-            <a style="color:#fff" href="#social"><h2 class="contacts">ПОМОЩЬ</h2></a>
+            <a style="color:#fff" href="\help"><h2>ПОМОЩЬ</h2></a>
         </div>
     </div>
 
@@ -114,10 +114,6 @@
             $(".popup_menu").css({"display":"block"})
         });
         $(".popup_bg_menu").click(function() {
-            $(".popup_menu").css({"display":"none"})
-            $(".menu_button").css({"display":"block"})
-        });
-        $(".contacts").click(function() {
             $(".popup_menu").css({"display":"none"})
             $(".menu_button").css({"display":"block"})
         });
