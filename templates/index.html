@@ -9,6 +9,15 @@
 {% block content %}
 
 <!-- Page items -->
+<div class="popup_help">
+    <div class="popup_bg_help"></div>
+    <div class="help">
+        <h2 style="text-align:center;width:100%">Правила заполнения поля Индивидуальные Достижения</h2>
+        {% for text in help_text %}
+            <p style="font-size:14px; margin: 0;text-align:center;width:100%">{{text}}</p>
+        {% endfor %}
+    </div>
+</div>
 <div class="container-total">
     <div class="container-main">
         <form method="post" enctype="multipart/form-data">
@@ -48,7 +57,9 @@
             <div class="ind_achieve">
                 <div style="margin: 0 20px 20px 0;display: flex;">
                     <h4 style="color: #000;">Введите Ваши индивидуальные достижения(ИД):</h4>
-                    <h4 style="color: #000;">help button</h4>
+                    <img class="help_button" style="cursor:pointer"
+                        src="{{ url_for( 'static', filename='img/server/help.png')}}" height=15
+                        width=15/>
                 </div>
                 <div class="bg_edu" style="display: flex;">
                     <p style="display: inline-block;padding-left:20px; padding-right:10vw;margin:0"><input style="margin-top:112px;" name="mode_achieve" type="radio" value="no_ind_achieve" checked> Без ИД</p>
@@ -70,5 +81,14 @@
 {% endblock %}
 
 {% block script %}
-
+<script>
+    $(function(){
+        $(".help_button").click(function() {
+            $(".popup_help").css({"display":"block"})
+        });
+        $(".popup_bg_help").click(function() {
+            $(".popup_help").css({"display":"none"})
+        });
+    });
+</script>
 {% endblock %}

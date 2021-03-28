@@ -23,6 +23,7 @@ def index():
     sub = Data.query.filter_by(name="subs").first().descr.split("; ")[1:]
     if request.method == 'GET':
         return render_template('index.html', faculties=faculties, col_edu=range(1, 8), subs=sub,
+                               help_text=information_extractor_f("help.txt")[0].split("\n"),
                                contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
                                    0].split("\n"))
     elif request.method == 'POST':
@@ -70,7 +71,7 @@ def index():
                                 sub_combs[sub_comb_n.id] = [score]
                             else:
                                 db.session.query(Sub_Comb).filter_by(id_fac=fac.id).filter_by(
-                                subs=fac.subjects).filter_by(user=id_req).update({"fl": flag})
+                                    subs=fac.subjects).filter_by(user=id_req).update({"fl": flag})
                                 db.session.commit()
                                 sub_combs[sub_comb.id].append(score)
                             result += ege_score

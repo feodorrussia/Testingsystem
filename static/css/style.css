@@ -185,6 +185,38 @@ margin: 16px 0 0 -16px;
 	max-width:50%;
 }
 
+
+.popup_help {
+	display:none;
+	position: fixed;
+	height:100%;
+	width:100%;
+	top:0;
+	left:0;
+	z-index:1;
+	text-align:center;
+}
+
+.popup_bg_help {
+	background:rgba(0,0,0,0.7);
+	position:absolute;
+	z-index:2;
+	height:100%;
+	width:100%;
+}
+
+.help{
+    background-color: #f0f0f0;
+    display:block;
+	position: absolute;
+	padding: 0 10vw;
+	top: 10vh;
+	right:20vw;
+	z-index:3;
+	height:85vh;
+	width:60vw;
+}
+
 /* -------- Page styles ---------  */
 
 #heading{
