@@ -112,7 +112,7 @@ def index():
                             score = f"r{sub[int(i) - 1][0]}"
                             flag = 1
                         sub_comb = Sub_Comb.query.filter_by(id_fac=fac.id).filter_by(
-                            sub=fac.subjects).filter_by(user=id_req).first()
+                            subs=fac.subjects).filter_by(user=id_req).first()
                         if not sub_comb:
                             sub_comb_n = Sub_Comb(id_fac=fac.id, subs=fac.subjects, fl=flag, user=id_req)
                             db.session.add(sub_comb_n)
