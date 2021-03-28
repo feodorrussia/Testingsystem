@@ -8,13 +8,12 @@ from db import Admin
 from db import Data
 from db import Faculties
 from db import Individual_achivements
+from db import Sub_Comb
 from db import Universities as Uni
 from db import University_Ach
 from db import University_Sub
 from little_functions import *
 from login import LoginForm
-
-sub_combs = {}
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -23,13 +22,16 @@ def index():
     faculties = [x.name for x in Faculties.query.all()]  #
     sub = Data.query.filter_by(name="subs").first().descr.split("; ")[1:]
     if request.method == 'GET':
-        return render_template('index.html', faculties=faculties, col_edu=[1, 2, 3, 4, 5], subs=sub,
+        return render_template('index.html', faculties=faculties, col_edu=range(1, 8), subs=sub,
                                contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
                                    0].split("\n"))
     elif request.method == 'POST':
-        subs = [0]
         global sub_combs
-        sub_combs = {}
+        req = Data(name="req", descr="")
+        db.session.add(req)
+        db.session.commit()
+        id_req = req.id
+        subs = [0]
         for i in sub:
             if request.form.get(f'{i}') != "":
                 subs.append(int(request.form.get(f'{i}')))
@@ -49,19 +51,28 @@ def index():
                     if fac and fac.id not in results.keys():
                         req_subs = fac.subjects.split()
                         result = 0
+                        flag = 1
                         for i in req_subs:
                             ege_score = subs[int(i)]
                             limit_score = University_Sub.query.filter_by(id_uni=fac.id_uni).filter_by(
                                 id_sub=i).first().limit_score
                             if limit_score <= ege_score:
-                                score = f"g{sub[int(i)-1][0]}"
-                                fl =True
-                            elif fl:
-                                score = f"r{sub[int(i)-1][0]}"
-                            if fac.subjects not in sub_combs.keys():
-                                sub_combs[fac.subjects] = [score]
+                                score = f"g{sub[int(i) - 1][0]}"
                             else:
-                                sub_combs[fac.subjects].append(score)
+                                score = f"r{sub[int(i) - 1][0]}"
+                                flag = 0
+                            sub_comb = Sub_Comb.query.filter_by(id_fac=fac.id).filter_by(
+                                subs=fac.subjects).filter_by(user=id_req).first()
+                            if not sub_comb:
+                                sub_comb_n = Sub_Comb(id_fac=fac.id, subs=fac.subjects, fl=flag, user=id_req)
+                                db.session.add(sub_comb_n)
+                                db.session.commit()
+                                sub_combs[sub_comb_n.id] = [score]
+                            else:
+                                db.session.query(Sub_Comb).filter_by(id_fac=fac.id).filter_by(
+                                subs=fac.subjects).filter_by(user=id_req).update({"fl": flag})
+                                db.session.commit()
+                                sub_combs[sub_comb.id].append(score)
                             result += ege_score
                         results[fac.id] = [str(result)]
             fl = "0"
@@ -82,12 +93,6 @@ def index():
                             else:
                                 results[fac_id][1] = str(max(int(results[fac_id][1]), int(point)))
                             results[fac_id].append(str(id_ach))
-            req = Data(name="req",
-                       descr=fl + "; ".join([str(k) + " " + " ".join(r) for k, r in results.items()]))
-            db.session.add(req)
-            db.session.commit()
-            id_req = req.id
-            return redirect(f"/result/{id_req}")
         else:
             results = {}
             for fac in Faculties.query.all():
@@ -95,19 +100,29 @@ def index():
                 if fac and fac.id not in results.keys():
                     req_subs = fac.subjects.split()
                     result = 0
+                    flag = 1
                     for i in req_subs:
                         ege_score = subs[int(i)]
                         limit_score = University_Sub.query.filter_by(id_uni=fac.id_uni).filter_by(
                             id_sub=i).first().limit_score
                         if limit_score <= ege_score:
-                            score = f"g{sub[int(i)-1][0]}"
+                            score = f"g{sub[int(i) - 1][0]}"
                         else:
-                            score = f"r{sub[int(i)-1][0]}"
-                        if fac.subjects not in sub_combs.keys():
-                            sub_combs[fac.subjects] = [score]
+                            score = f"r{sub[int(i) - 1][0]}"
+                            flag = 1
+                        sub_comb = Sub_Comb.query.filter_by(id_fac=fac.id).filter_by(
+                            sub=fac.subjects).filter_by(user=id_req).first()
+                        if not sub_comb:
+                            sub_comb_n = Sub_Comb(id_fac=fac.id, subs=fac.subjects, fl=flag, user=id_req)
+                            db.session.add(sub_comb_n)
+                            db.session.commit()
+                            sub_combs[sub_comb_n.id] = [score]
                             fl = True
                         elif fl:
-                            sub_combs[fac.subjects].append(score)
+                            db.session.query(Sub_Comb).filter_by(id_fac=fac.id).filter_by(
+                                subs=fac.subjects).filter_by(user=id_req).update({"fl": flag})
+                            db.session.commit()
+                            sub_combs[sub_comb.id].append(score)
                         result += ege_score
                     results[fac.id] = [str(result)]
             fl = "0"
@@ -127,12 +142,10 @@ def index():
                             else:
                                 results[fac_id][1] = str(max(int(results[fac_id][1]), int(score)))
                             results[fac_id].append(str(id_ach))
-            req = Data(name="req",
-                       descr=fl + "; ".join([str(k) + " " + " ".join(r) for k, r in results.items()]))
-            db.session.add(req)
-            db.session.commit()
-            id_req = req.id
-            return redirect(f"/result/{id_req}")
+        req = db.session.query(Data).get(id_req)
+        req.descr = fl + "; ".join([str(k) + " " + " ".join(r) for k, r in results.items()])
+        db.session.commit()
+        return redirect(f"/result/{id_req}")
 
 
 @app.route('/result/<int:id_req>')
@@ -145,17 +158,17 @@ def result(id_req):
         result = sorted([list(map(int, i.split())) for i in req[1:].split("; ")], key=lambda x: -int(x[1]))
         print(result)
         return render_template('result_wia.html', result=result, facts=Faculties(), sub=sub, uni=uni,
-                               sub_comb=sub_combs,
+                               sub_comb=Sub_Comb(), id_req=id_req, sub_combs=sub_combs,
                                ind_ach=Individual_achivements(), uni_ach=University_Ach(), uni_sub=University_Sub(),
                                contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
                                    0].split("\n"))
     else:
         result = sorted([list(map(int, x.split())) for x in req[1:].split("; ")], key=lambda x: -int(x[1]))
-        print(result)
-        return render_template('result_na.html', result=result, facts=Faculties(), sub=sub, uni=uni, sub_comb=sub_combs,
+        print(result)  # [Faculties.query.filter_by(id=5).first().subjects][1]
+        return render_template('result_na.html', result=result, facts=Faculties(), sub=sub, uni=uni,
+                               sub_comb=Sub_Comb(), id_req=id_req, sub_combs=sub_combs,
                                contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
                                    0].split("\n"))
-
 
 
 @app.route('/login', methods=['POST', 'GET'])

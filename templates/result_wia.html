@@ -32,7 +32,7 @@
                 <h2 align="center" style="width: 24vw;align-self: center;padding: 30px 3vw; margin: 0">{{facts.query.filter_by(id=i[0]).first().name}}</h2>
                 <h2 align="center" style="width: 20vw;align-self: center;padding: 30px 3vw; margin: 0">{{uni[facts.query.filter_by(id=i[0]).first().id_uni - 1]}}</h2>
                 <div style="width: 10vw;padding: 30px 1vw;display: flex">
-                    {% for score in sub_comb[facts.query.filter_by(id=i[0]).first().subjects] %}
+                    {% for score in sub_combs[sub_comb.query.filter_by(id_fac=i[0]).filter_by(subs=facts.query.filter_by(id=i[0]).first().subjects).filter_by(user=id_req).first().id] %}
                         {% if score[0]=="g" %}
                             <h2 align="center" style="align-self: center;color:#009900;padding-right: 10%; margin: 0">{{score[1:]}}</h2>
                         {% endif %}
@@ -40,20 +40,20 @@
                             <h2 align="center" style="align-self: center;color:#f80000;padding-right: 10%; margin: 0">{{score[1:]}}</h2>
                         {% endif %}
                     {% endfor %}
-                </div>
-                {% if facts.query.filter_by(id=i[0]).first().passing_score <= i[1]+i[2] %}
+            </div>
+                {% if facts.query.filter_by(id=i[0]).first().passing_score <= i[1] + i[2] and sub_comb.query.filter_by(id_fac=i[0]).filter_by(subs=facts.query.filter_by(id=i[0]).first().subjects).filter_by(user=id_req).first().fl == 1 %}
                     <h2 align="center" style="align-self: center;width: 10vw;color:#009900;padding: 30px 3vw; margin: 0">{{facts.query.filter_by(id=i[0]).first().passing_score}}</h2>
                 {% endif %}
-                {% if facts.query.filter_by(id=i[0]).first().passing_score > i[1]+i[2] %}
+                {% if facts.query.filter_by(id=i[0]).first().passing_score > i[1] + i[2] or sub_comb.query.filter_by(id_fac=i[0]).filter_by(subs=facts.query.filter_by(id=i[0]).first().subjects).filter_by(user=id_req).first().fl == 0 %}
                     <h2 align="center" style="align-self: center;width: 10vw;color:#f80000;padding: 30px 3vw; margin: 0">{{facts.query.filter_by(id=i[0]).first().passing_score}}</h2>
                 {% endif %}
             </div>
-            <a href="javascript:void(0)" onclick="my_f('{{i[0]}}')">
-                <div class="line-button" style="margin: 10px 10px; padding-bottom: 10px; display: flex; width: auto">
-                    <div class="line-yellow" style="margin: 0 auto; width: 70vw"></div>
-                </div>
-            </a>
-            <div id = "{{i[0]}}" class="container-flash" style="margin: 10px 10px; width: auto;padding-bottom: 20px; display:none">
+            <div id = "{{i[0]}}" class="container-flash" style="margin: 10px 10px; width: auto;display:none">
+                <a href="javascript:void(0)" onclick="my_f('{{i[0]}}')">
+                    <div class="line-button" style="margin: 10px 10px; padding-bottom: 10px; display: flex; width: auto">
+                        <div class="line" style="background: orange;margin: 0 auto; width: 70vw"></div>
+                    </div>
+                </a>
                 <div class="container-main" style="margin: 0px 10px; width: auto;background-color: #ddd">
                     <h3 style="padding: 20px 10px 20px 20px; margin: 0">Ваш дополнительный балл: {{i[2]}}*</h3>
                     <div class="line-button" style="margin: 0px 10px; display: flex; width: auto">
@@ -76,9 +76,13 @@
                         <h2 align="center" style="align-self: center;width: 12vw;padding: 30px 1vw; margin: 0">{{uni_ach.query.filter_by(id_ach=j).filter_by(id_uni=facts.query.filter_by(id=i[0]).first().id_uni).first().point}}</h2>
                     </div>
                 {% endfor %}
-            <div class="line-button" style="margin: 0px 10px; padding-top: 5px; display: flex; width: auto">
-                <div class="line-yellow" style="margin: 0 auto; width: 70vw"></div>
             </div>
+            <div class="line-button" style="display: flex; padding-bottom: 15px; display: flex; width: auto"  onclick="my_f('{{i[0]}}')">
+                <div class="line" style="background: orange;margin: 0 auto; margin-top:30px; width: 30vw"></div>
+                <img style="cursor:pointer"
+                    src="{{ url_for( 'static', filename='img/server/logo.png')}}" height=60
+                    width=60/>
+                <div class="line" style="background: orange;margin: 0 auto; margin-top:30px;  width: 30vw"></div>
             </div>
         </div>
     {% endfor %}

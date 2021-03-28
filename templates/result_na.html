@@ -31,19 +31,19 @@
             <h2 align="center" style="width: 24vw;align-self: center;padding: 30px 3vw; margin: 0">{{facts.query.filter_by(id=i[0]).first().name}}</h2>
             <h2 align="center" style="width: 20vw;align-self: center;padding: 30px 3vw; margin: 0">{{uni[facts.query.filter_by(id=i[0]).first().id_uni - 1]}}</h2>
             <div style="width: 10vw;padding: 30px 1vw;display: flex">
-                {% for score in sub_comb[facts.query.filter_by(id=i[0]).first().subjects] %}
-                    {% if score[0]=="g" %}
-                        <h2 align="center" style="align-self: center;color:#009900;padding-right: 10%; margin: 0">{{score[1:]}}</h2>
-                    {% endif %}
-                    {% if score[0]=="r" %}
-                        <h2 align="center" style="align-self: center;color:#f80000;padding-right: 10%; margin: 0">{{score[1:]}}</h2>
-                    {% endif %}
-                {% endfor %}
+                {% for score in sub_combs[sub_comb.query.filter_by(id_fac=i[0]).filter_by(subs=facts.query.filter_by(id=i[0]).first().subjects).filter_by(user=id_req).first().id] %}
+                        {% if score[0]=="g" %}
+                            <h2 align="center" style="align-self: center;color:#009900;padding-right: 10%; margin: 0">{{score[1:]}}</h2>
+                        {% endif %}
+                        {% if score[0]=="r" %}
+                            <h2 align="center" style="align-self: center;color:#f80000;padding-right: 10%; margin: 0">{{score[1:]}}</h2>
+                        {% endif %}
+                    {% endfor %}
             </div>
-                {% if facts.query.filter_by(id=i[0]).first().passing_score <= i[1] %}
+                {% if facts.query.filter_by(id=i[0]).first().passing_score <= i[1] and sub_comb.query.filter_by(id_fac=i[0]).filter_by(subs=facts.query.filter_by(id=i[0]).first().subjects).filter_by(user=id_req).first().fl == 1 %}
                     <h2 align="center" style="align-self: center;width: 10vw;color:#009900;padding: 30px 3vw; margin: 0">{{facts.query.filter_by(id=i[0]).first().passing_score}}</h2>
                 {% endif %}
-                {% if facts.query.filter_by(id=i[0]).first().passing_score > i[1] %}
+                {% if facts.query.filter_by(id=i[0]).first().passing_score > i[1] or sub_comb.query.filter_by(id_fac=i[0]).filter_by(subs=facts.query.filter_by(id=i[0]).first().subjects).filter_by(user=id_req).first().fl == 0 %}
                     <h2 align="center" style="align-self: center;width: 10vw;color:#f80000;padding: 30px 3vw; margin: 0">{{facts.query.filter_by(id=i[0]).first().passing_score}}</h2>
                 {% endif %}
         </div>
