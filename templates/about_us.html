@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+<title>POSTUPIL TEST</title>
+{% endblock %}
+
+
+{% block content %}
+
+<!-- Page items -->
+
+<div class="container-total">
+    <div class="container-main">
+        <h1 style="text-align:center;width:100%">О Проекте</h1>
+        {% for text in text %}
+            <p style="font-size:14px; margin: 0;text-align:center;width:100%">{{text}}</p>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block script %}
+{% endblock %}

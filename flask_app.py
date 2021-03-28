@@ -182,6 +182,20 @@ def login():
     return render_template('loginform.html', form=form)
 
 
+@app.route('/help')
+def help():
+    return render_template('help.html', text=information_extractor_f("help.txt")[0].split("\n"),
+                               contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
+                                   0].split("\n"))
+
+
+@app.route('/about_us')
+def about_us():
+    return render_template('about_us.html', text=information_extractor_f("help.txt")[0].split("\n"),
+                               contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
+                                   0].split("\n"))
+
+
 if __name__ == '__main__':
     app.run(debug=True)
 '''port=8080, host='127.0.0.1'''
