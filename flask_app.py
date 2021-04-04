@@ -23,7 +23,7 @@ def index():
     sub = Data.query.filter_by(name="subs").first().descr.split("; ")[1:]
     if request.method == 'GET':
         return render_template('index.html', faculties=faculties, col_edu=range(1, 8), subs=sub,
-                               help_text=information_extractor_f("help.txt")[0].split("\n"),
+                               help_text=information_extractor_f("help.txt")[0].split("\n"), id_req=0,
                                contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
                                    0].split("\n"))
     elif request.method == 'POST':
@@ -185,16 +185,40 @@ def login():
 
 @app.route('/help')
 def help():
-    return render_template('help.html', text=information_extractor_f("help.txt")[0].split("\n"),
-                               contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
-                                   0].split("\n"))
+    return render_template('help.html', text=information_extractor_f("def.txt")[0].split("\n"), id_req=0,
+                           contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
+                               0].split("\n"))
 
 
 @app.route('/about_us')
 def about_us():
-    return render_template('about_us.html', text=information_extractor_f("help.txt")[0].split("\n"),
-                               contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
-                                   0].split("\n"))
+    return render_template('about_us.html', text=information_extractor_f("def.txt")[0].split("\n"), id_req=0,
+                           contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
+                               0].split("\n"))
+
+
+@app.route('/index_ds/<int:id_req>')
+def index_ds(id_req):
+    if id_req != -1:
+        Data.query.filter_by(id=id_req).delete()
+        db.session.commit()
+    return redirect("/index")
+
+
+@app.route('/about_us_ds/<int:id_req>')
+def about_us_ds(id_req):
+    if id_req != 0:
+        Data.query.filter_by(id=id_req).delete()
+        db.session.commit()
+    return redirect("/about_us")
+
+
+@app.route('/help_ds/<int:id_req>')
+def help_ds(id_req):
+    if id_req != 0:
+        Data.query.filter_by(id=id_req).delete()
+        db.session.commit()
+    return redirect("/help")
 
 
 if __name__ == '__main__':

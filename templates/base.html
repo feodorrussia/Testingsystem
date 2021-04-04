@@ -17,7 +17,7 @@
     <meta name="author" content="">
 
     <!-- Styles -->
-    <link href="{{ url_for( 'static', filename='css/style.css')}}?ver=40" rel="stylesheet">
+    <link href="{{ url_for( 'static', filename='css/style.css')}}?ver=42" rel="stylesheet">
     <link href="{{ url_for( 'static', filename='css/bootstrap.min.css')}}?ver=1" rel="stylesheet">
     <style>
       body {
@@ -32,7 +32,7 @@
 <body>
     <!-- Header -->
     <div class="header">
-        <a class="home" href="\index" style="margin:5px 5px 5px 20px"><img
+        <a class="home" href="/index_ds/{{id_req}}" style="margin:5px 5px 5px 20px"><img
             src="{{ url_for( 'static', filename='img/server/icon-home.png')}}" height=56 width=56/></a>
         <h1 style="color: orange;display:block;margin: 5px auto;align-self:center;padding-right:75px;max-width:60vw">POSTUPIL TEST</h1>
         <img class="menu_button" style="display:block;position:absolute;right:32px;margin-top:15px;cursor:pointer"
@@ -52,11 +52,11 @@
     <div class="popup_menu">
         <div class="popup_bg_menu"></div>
         <div class="menu">
-            <a style="color:#fff;" href="\index"><h2 style="margin-top:100px;">ГЛАВНАЯ</h2></a>
+            <a style="color:#fff;" href="/index_ds/{{id_req}}"><h2 style="margin-top:100px;">ГЛАВНАЯ</h2></a>
             <div class="line-yellow"></div>
-            <a style="color:#fff;" href="\about_us"><h2>О ПРОЕКТЕ</h2></a>
+            <a style="color:#fff;" href="/about_us_ds/{{id_req}}"><h2>О ПРОЕКТЕ</h2></a>
             <div class="line-yellow"></div>
-            <a style="color:#fff" href="\help"><h2>ПОМОЩЬ</h2></a>
+            <a style="color:#fff" href="/help_ds/{{id_req}}"><h2>ПОМОЩЬ</h2></a>
         </div>
     </div>
 
