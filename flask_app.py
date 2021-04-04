@@ -157,10 +157,9 @@ def result(id_req):
     global sub_combs
     sub = Data.query.filter_by(name="subs").first().descr.split("; ")
     req = Data.query.filter_by(id=f'{id_req}').first().descr
-    uni = [x.name for x in Uni.query.all()]
     if req[0] == "1":
         result = sorted([list(map(int, i.split())) for i in req[1:].split("; ")], key=lambda x: -int(x[1]))
-        return render_template('result_wia.html', result=result, facts=Faculties(), sub=sub, uni=uni,
+        return render_template('result_wia.html', result=result, facts=Faculties(), sub=sub, uni=Uni(),
                                sub_comb=Sub_Comb(), id_req=id_req, sub_combs=sub_combs,
                                ind_ach=Individual_achivements(), uni_ach=University_Ach(), uni_sub=University_Sub(),
                                contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
@@ -172,7 +171,7 @@ def result(id_req):
             return render_template('error.html', id_req=id_req,
                                    contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
                                        0].split("\n"))
-        return render_template('result_na.html', result=result, facts=Faculties(), sub=sub, uni=uni,
+        return render_template('result_na.html', result=result, facts=Faculties(), sub=sub, uni=Uni(),
                                sub_comb=Sub_Comb(), id_req=id_req, sub_combs=sub_combs, uni_sub=University_Sub(),
                                contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
                                    0].split("\n"))

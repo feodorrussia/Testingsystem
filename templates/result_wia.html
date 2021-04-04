@@ -40,7 +40,7 @@
                     <h3 style="padding: 20px 10px 10px 20px; margin: 0">Ваш общий балл: {{i[1]+i[2]}} (с учётом ИД)</h3>
                     <h3 style="padding: 10px 10px 20px 20px; margin: 0">Ваш средний балл: {{(i[1]+i[2])//3}}</h3>
                 </div>
-                <h2 align="center" style="width: 44vw;align-self: center;padding: 30px 3vw; margin: 0">{{facts.query.filter_by(id=i[0]).first().name}}</h2>
+                <a style="color: #000"  target="_blank" href="{{uni.query.filter_by(id=facts.query.filter_by(id=i[0]).first().id_uni).first().com_link}}"><h2 align="center" style="width: 44vw;align-self: center;padding: 30px 3vw; margin: 0">{{facts.query.filter_by(id=i[0]).first().name}}</h2></a>
                 <div style="width: 10vw;padding: 30px 1vw;display: flex;position:relative" onmouseout="f_out('h_{{i[0]}}')" onmouseover="f_on('h_{{i[0]}}')">
                     {% for score in sub_combs[sub_comb.query.filter_by(id_fac=i[0]).filter_by(subs=facts.query.filter_by(id=i[0]).first().subjects).filter_by(user=id_req).first().id] %}
                             {% if score[0]=="g" %}
