@@ -19,6 +19,8 @@ from login import LoginForm
 @app.route('/', methods=['POST', 'GET'])
 @app.route('/index', methods=['POST', 'GET'])
 def index():
+    global sub_combs
+    print(sub_combs)
     faculties = [x.name for x in Faculties.query.all()]  #
     sub = Data.query.filter_by(name="subs").first().descr.split("; ")[1:]
     if request.method == 'GET':
@@ -27,7 +29,6 @@ def index():
                                contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
                                    0].split("\n"))
     elif request.method == 'POST':
-        global sub_combs
         req = Data(name="req", descr="")
         db.session.add(req)
         db.session.commit()
@@ -125,7 +126,8 @@ def index():
                             db.session.commit()
                             sub_combs[sub_comb.id].append(score)
                         result += ege_score
-                    results[fac.id] = [str(result)]
+                    if result >= fac.passing_score:
+                        results[fac.id] = [str(result)]
             fl = "0"
             if request.form.get('mode_achieve') == "ind_achieve":
                 fl = "1"
@@ -143,6 +145,7 @@ def index():
                             else:
                                 results[fac_id][1] = str(max(int(results[fac_id][1]), int(score)))
                             results[fac_id].append(str(id_ach))
+        print(sub_combs)
         req = db.session.query(Data).get(id_req)
         req.descr = fl + "; ".join([str(k) + " " + " ".join(r) for k, r in results.items()])
         db.session.commit()
@@ -157,17 +160,20 @@ def result(id_req):
     uni = [x.name for x in Uni.query.all()]
     if req[0] == "1":
         result = sorted([list(map(int, i.split())) for i in req[1:].split("; ")], key=lambda x: -int(x[1]))
-        print(result)
         return render_template('result_wia.html', result=result, facts=Faculties(), sub=sub, uni=uni,
                                sub_comb=Sub_Comb(), id_req=id_req, sub_combs=sub_combs,
                                ind_ach=Individual_achivements(), uni_ach=University_Ach(), uni_sub=University_Sub(),
                                contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
                                    0].split("\n"))
     else:
-        result = sorted([list(map(int, x.split())) for x in req[1:].split("; ")], key=lambda x: -int(x[1]))
-        print(result)  # [Faculties.query.filter_by(id=5).first().subjects][1]
+        if len(req) != 1:
+            result = sorted([list(map(int, x.split())) for x in req[1:].split("; ")], key=lambda x: -int(x[1]))
+        else:
+            return render_template('error.html', id_req=id_req,
+                                   contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
+                                       0].split("\n"))
         return render_template('result_na.html', result=result, facts=Faculties(), sub=sub, uni=uni,
-                               sub_comb=Sub_Comb(), id_req=id_req, sub_combs=sub_combs,
+                               sub_comb=Sub_Comb(), id_req=id_req, sub_combs=sub_combs, uni_sub=University_Sub(),
                                contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
                                    0].split("\n"))
 
@@ -199,24 +205,37 @@ def about_us():
 
 @app.route('/index_ds/<int:id_req>')
 def index_ds(id_req):
-    if id_req != -1:
+    global sub_combs
+    print(sub_combs)
+    if id_req != 0:
         Data.query.filter_by(id=id_req).delete()
+        for i in Sub_Comb.query.filter_by(user=id_req).all():
+            del sub_combs[i.id]
+        Sub_Comb.query.filter_by(user=id_req).delete()
         db.session.commit()
     return redirect("/index")
 
 
 @app.route('/about_us_ds/<int:id_req>')
 def about_us_ds(id_req):
+    global sub_combs
     if id_req != 0:
         Data.query.filter_by(id=id_req).delete()
+        for i in Sub_Comb.query.filter_by(user=id_req).all():
+            del sub_combs[i.id]
+        Sub_Comb.query.filter_by(user=id_req).delete()
         db.session.commit()
     return redirect("/about_us")
 
 
 @app.route('/help_ds/<int:id_req>')
 def help_ds(id_req):
+    global sub_combs
     if id_req != 0:
         Data.query.filter_by(id=id_req).delete()
+        for i in Sub_Comb.query.filter_by(user=id_req).all():
+            del sub_combs[i.id]
+        Sub_Comb.query.filter_by(user=id_req).delete()
         db.session.commit()
     return redirect("/help")
 
