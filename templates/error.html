@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+<title>POSTUPIL TEST</title>
+{% endblock %}
+
+
+{% block content %}
+
+<!-- Page items -->
+
+<div class="container-total">
+    <div class="container-main" style="padding:20px 0;margin:30px 0">
+        <img style="margin-left:45%; margin-top:10px" src="{{ url_for( 'static', filename='img/server/denied_2.png')}}" height=96 width=96/>
+        <h2 style="text-align:center;width:100%;padding:5px 0;">По Вашему запросу ничего не найдено. Проверьте правильность введённых Вами данных</h2>
+        <h2 style="text-align:center;width:100%;padding:5px 0;">Также могла произойти ошибка на стороне сервера.</h2>
+        <h2 style="text-align:center;width:100%;padding:5px 0;">Приносим свои извинения.</h2>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block script %}
+{% endblock %}
