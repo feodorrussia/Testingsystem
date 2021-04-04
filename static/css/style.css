@@ -209,12 +209,24 @@ margin: 16px 0 0 -16px;
     background-color: #f0f0f0;
     display:block;
 	position: absolute;
-	padding: 0 10vw;
+	padding: 0 7vw;
 	top: 10vh;
 	right:20vw;
 	z-index:3;
 	height:85vh;
 	width:60vw;
+}
+
+.help_flash{
+    background-color: #ffaa00;
+    display:none;
+	position: absolute;
+	padding: 10px;
+	bottom: 80px;
+	right: -8px;
+	z-index:5;
+	height: auto;
+	width:180px;
 }
 
 /* -------- Page styles ---------  */

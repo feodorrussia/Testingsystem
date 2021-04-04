@@ -16,29 +16,46 @@
                 <h2 align="center" style="align-self: center;padding: 10px 10px 10px 20px; margin: 0">Ваши баллы</h2>
             </div>
             <h2 align="center" style="width: 45vw;align-self: center;padding: 30px 1vw; margin: 0 10px">Название университета и факультета</h2>
-            <div style="width: 12vw;display: flex">
-                <h4 align="center" style="align-self: center;padding: 30px 1vw; margin: 0">Предметы ЕГЭ</h4>
+            <div style="width: 12vw;display: flex;position:relative">
+                <h4 align="center" style="align-self: center;padding: 30px 1vw; margin: 0" onmouseout="f_out('h_s0')" onmouseover="f_on('h_s0')">Предметы ЕГЭ*</h4>
+                <div id="h_s0" class="help_flash" style="width:190px;bottom:70px">
+                    <p style="font-size:12px;text-align:center;width:100%;margin:0">Если предмет окрашен в красный,</p>
+                    <p style="font-size:12px;text-align:center;width:100%;margin:0">то Вы не можете поступить</p>
+                    <p style="font-size:12px;text-align:center;width:100%;margin:0">на этот факультет даже с проходным баллом</p>
+                </div>
             </div>
-            <h4 align="center" style="align-self: center;width: 12vw;padding: 30px 1vw; margin: 0">Проходной балл</h4>
+            <div style="position: relative" onmouseout="f_out('h_s1')" onmouseover="f_on('h_s1')">
+                <h4 align="center" style="align-self: center;width: 12vw;padding: 30px 1vw; margin: 0">Проходной балл*</h4>
+                <div id="h_s1" class="help_flash" style="width:190px;bottom:70px">
+                    <p style="font-size:12px;text-align:center;width:100%;margin:0">Если балл окрашен в красный,</p>
+                    <p style="font-size:12px;text-align:center;width:100%;margin:0">то Вы не можете поступить</p>
+                    <p style="font-size:12px;text-align:center;width:100%;margin:0">на этот факультет по баллам ЕГЭ</p>
+                </div>
+            </div>
         </div>
         {% for i in result %}
         <div class="container-main" style="margin: 10px 10px; width: auto">
             <div style="display: flex;">
                 <div style="width: 25vw">
-                    <h3 style="padding: 20px 10px 10px 20px; margin: 0">Ваш общий балл: {{i[1]+i[2]}}</h3>
+                    <h3 style="padding: 20px 10px 10px 20px; margin: 0">Ваш общий балл: {{i[1]+i[2]}} (с учётом ИД)</h3>
                     <h3 style="padding: 10px 10px 20px 20px; margin: 0">Ваш средний балл: {{(i[1]+i[2])//3}}</h3>
                 </div>
                 <h2 align="center" style="width: 44vw;align-self: center;padding: 30px 3vw; margin: 0">{{facts.query.filter_by(id=i[0]).first().name}}</h2>
-                <div style="width: 10vw;padding: 30px 1vw;display: flex">
+                <div style="width: 10vw;padding: 30px 1vw;display: flex;position:relative" onmouseout="f_out('h_{{i[0]}}')" onmouseover="f_on('h_{{i[0]}}')">
                     {% for score in sub_combs[sub_comb.query.filter_by(id_fac=i[0]).filter_by(subs=facts.query.filter_by(id=i[0]).first().subjects).filter_by(user=id_req).first().id] %}
-                        {% if score[0]=="g" %}
-                            <h2 align="center" style="align-self: center;color:#009900;padding-right: 10%; margin: 0">{{score[1:]}}</h2>
-                        {% endif %}
-                        {% if score[0]=="r" %}
-                            <h2 align="center" style="align-self: center;color:#f80000;padding-right: 10%; margin: 0">{{score[1:]}}</h2>
-                        {% endif %}
-                    {% endfor %}
-            </div>
+                            {% if score[0]=="g" %}
+                                <h2 align="center" style="align-self: center;color:#009900;padding-right: 10%; margin: 0">{{score[1:]}}</h2>
+                            {% endif %}
+                            {% if score[0]=="r" %}
+                                <h2 align="center" style="align-self: center;color:#f80000;padding-right: 10%; margin: 0">{{score[1:]}}</h2>
+                            {% endif %}
+                        {% endfor %}
+                    <div id="h_{{i[0]}}" class="help_flash">
+                        <p style="font-size:12px;text-align:center;width:100%;margin:0">Для данного факультета</p>
+                        <p style="font-size:12px;text-align:center;width:100%;margin:0">минимальный балл по ЕГЭ:</p>
+                        <p style="font-size:14px;text-align:center;width:100%;margin:0"> {{uni_sub.query.filter_by(id_uni=facts.query.filter_by(id=i[0]).first().id_uni).first().limit_score}} /100</p>
+                    </div>
+                </div>
                 {% if facts.query.filter_by(id=i[0]).first().passing_score <= i[1] + i[2] and sub_comb.query.filter_by(id_fac=i[0]).filter_by(subs=facts.query.filter_by(id=i[0]).first().subjects).filter_by(user=id_req).first().fl == 1 %}
                     <h2 align="center" style="align-self: center;width: 10vw;color:#009900;padding: 30px 3vw; margin: 0">{{facts.query.filter_by(id=i[0]).first().passing_score}}</h2>
                 {% endif %}
@@ -53,7 +70,12 @@
                     </div>
                 </a>
                 <div class="container-main" style="margin: 0px 10px; width: auto;background-color: #ddd">
-                    <h3 style="padding: 20px 10px 20px 20px; margin: 0">Ваш дополнительный балл: {{i[2]}}*</h3>
+                    <div onmouseover="f_on('h_ia{{i[0]}}')" onmouseout="f_out('h_ia{{i[0]}}')">
+                        <h3 style="padding: 20px 10px 20px 20px; margin: 0;position:relative">Ваш дополнительный балл: {{i[2]}}*</h3>
+                        <div id="h_ia{{i[0]}}" class="help_flash" style="width:100px;left:30vw;bottom:170px">
+                            <p style="font-size:12px;text-align:center;width:100%;margin:0">Макс. балл по Ид - 10</p>
+                        </div>
+                    </div>
                     <div class="line-button" style="margin: 0px 10px; display: flex; width: auto">
                         <div class="line" style="margin: 0 auto; width: 60%"></div>
                     </div>
@@ -96,6 +118,14 @@
 function f(objName) {
     var object = document.getElementById(objName);
     object.style.display == 'none' ? object.style.display = 'block' : object.style.display = 'none'
+}
+function f_out(objName) {
+    var object = document.getElementById(objName);
+    object.style.display = 'none';
+}
+function f_on(objName) {
+    var object = document.getElementById(objName);
+    object.style.display = 'block';
 }
 </script>
 {% endblock %}
