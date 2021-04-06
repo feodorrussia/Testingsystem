@@ -169,21 +169,24 @@ def result(id_req):
             result = sorted([list(map(int, x.split())) for x in req[1:].split("; ")], key=lambda x: -int(x[1]))
         else:
             return render_template('error.html', id_req=id_req,
-                                   contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
+                                   contacts=
+                                   information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
                                        0].split("\n"))
         return render_template('result_woa.html', result=result, facts=Faculties(), sub=sub, uni=Uni(),
                                sub_comb=Sub_Comb(), id_req=id_req, sub_combs=sub_combs, uni_sub=University_Sub(),
                                contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
-                                   0].split("\n"))@app.route('/help')
+                                   0].split("\n")) @ app.route('/help')
+
+
 def help():
-    return render_template('help.html', text=information_extractor_f("def.txt")[0].split("\n"), id_req=0,
+    return render_template('help.html', text=information_extractor_f("help_page.txt")[0].split("\n"), id_req=0,
                            contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
                                0].split("\n"))
 
 
 @app.route('/about_us')
 def about_us():
-    return render_template('about_us.html', text=information_extractor_f("def.txt")[0].split("\n"), id_req=0,
+    return render_template('about_us.html', text=information_extractor_f("about_us.txt")[0].split("\n"), id_req=0,
                            contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
                                0].split("\n"))
 
@@ -232,11 +235,45 @@ def login():
     if Admin.query.filter_by(password=password).all():
         Admin.query.filter_by(id=0).first().status = 1
         db.session.commit()
-        return redirect("/ed_title")
+        return redirect("/ed_texts")
     return render_template('loginform.html', form=form)
 
 
+@app.route('/ed_texts', methods=['POST', 'GET'])
+def ed_texts():
+    if Admin.query.filter_by(id=0).first().status != 1:
+        return redirect("/login")
+    rules = information_extractor_f("help.txt")[0]
+    about_us = information_extractor_f("about_us.txt")[0]
+    help = information_extractor_f("help_page.txt")[0]
+    if request.method == 'GET':
+        return render_template('ed_texts.html', rules=rules, about_us=about_us, help=help)
+    elif request.method == 'POST':
+        new = request.form.get('help_page')
+        if new != help:
+            file = open(f"static/text_data/help_page{divider}.txt", "w")
+            file.write(new)
+            file.close()
+        new = request.form.get('about_us')
+        if new != about_us:
+            file = open(f"static/text_data/about_us{divider}.txt", "w")
+            file.write(new)
+            file.close()
+        new = request.form.get('rules')
+        if new != rules:
+            file = open(f"static/text_data/help{divider}.txt", "w")
+            file.write(new)
+            file.close()
+        return render_template('ed_texts.html', rules=rules, about_us=about_us, help=help)
 
+
+@app.route('/exit')
+def f_exit():
+    if Admin.query.filter_by(id=0).first().status != 1:
+        return redirect("/login")
+    Admin.query.filter_by(id=0).first().status = 0
+    db.session.commit()
+    return redirect("/index")
 
 
 if __name__ == '__main__':
