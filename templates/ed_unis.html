@@ -1,0 +1,11 @@
+{% extends "ed_index.html" %}
+
+
+{% block tools %}
+    {% for i in uni %}
+        <div class="title_tools" style="padding:10px">
+            <a href="/ed_uni/{{i.id}}" ><h4 style="padding-right: 20px">{{i.name}}</h4></a>
+            <textarea name="{{i.id}}" rows="1" cols="70" wrap="virtual" style="">{{i.com_link}}</textarea>
+        </div>
+    {% endfor %}
+{% endblock %}

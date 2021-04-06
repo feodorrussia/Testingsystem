@@ -177,7 +177,7 @@ def result(id_req):
                                contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
                                    0].split("\n")) @ app.route('/help')
 
-
+@app.route('/help')
 def help():
     return render_template('help.html', text=information_extractor_f("help_page.txt")[0].split("\n"), id_req=0,
                            contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
@@ -265,6 +265,22 @@ def ed_texts():
             file.write(new)
             file.close()
         return render_template('ed_texts.html', rules=rules, about_us=about_us, help=help)
+
+@app.route('/ed_unis', methods=['POST', 'GET'])
+def ed_unis():
+    if Admin.query.filter_by(id=0).first().status != 1:
+        return redirect("/login")
+    unis = Uni.query.all()
+    if request.method == 'GET':
+        return render_template('ed_unis.html', uni=unis)
+    elif request.method == 'POST':
+        for i in unis:
+            new = request.form.get(f'{i.id}')
+            if new != i.com_link:
+                uni = db.session.query(Uni).get(i.id)
+                uni.com_link = new
+                db.session.commit()
+        return render_template('ed_unis.html', uni=unis)
 
 
 @app.route('/exit')
