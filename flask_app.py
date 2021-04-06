@@ -177,9 +177,18 @@ def result(id_req):
                                contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
                                    0].split("\n")) @ app.route('/help')
 
+
 @app.route('/help')
 def help():
     return render_template('help.html', text=information_extractor_f("help_page.txt")[0].split("\n"), id_req=0,
+                           contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
+                               0].split("\n"))
+
+
+@app.route('/ind_ach')
+def ind_ach():
+    ind_achs = sorted(Individual_achivements.query.all(), key=lambda x: x.name)
+    return render_template('ind_ach.html', ind_ach=ind_achs, id_req=0,
                            contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
                                0].split("\n"))
 
@@ -265,6 +274,7 @@ def ed_texts():
             file.write(new)
             file.close()
         return render_template('ed_texts.html', rules=rules, about_us=about_us, help=help)
+
 
 @app.route('/ed_unis', methods=['POST', 'GET'])
 def ed_unis():

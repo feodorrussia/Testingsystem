@@ -12,11 +12,13 @@
 
 <div class="container-total">
     <div class="container-main">
-        <h1 style="text-align:center;width:100%; padding: 20px 0;">Помощь в использовании сайта</h1>
-        {% for text in text %}
-            <p style=" bacground: #f0f0f0; font-size:24px; margin: 2px 0;text-align:center;width:100%;padding:0 10vw;">{{text}}</p>
+        <h1 style="text-align:center;width:100%;padding:20px 0">Список Индивидуальных достижений</h1>
+        {% for i in ind_ach %}
+        <div style="display: flex">
+            <p style="font-size:20px; margin: 0;text-align:center;width:30%;padding:0 15px;vertical-align: center">{{i.name}}</p>
+            <p style="font-size:18px; margin: 0;text-align:center;width:30%;padding:0 15px;">{{i.descr}}</p>
+        </div>
         {% endfor %}
-        <a href="/ind_ach"><p style="color: black;font-size:24px; margin: 0;text-align:left;width:100%;padding:10px 10vw;">Список Индивидуальных достижений</p></a>
         <div class="line-button" style="display: flex; padding: 20px 0; display: flex; width: auto">
             <div class="line" style="background: orange;margin: 0 auto; margin-top:30px; width: 30vw"></div>
             <img src="{{ url_for( 'static', filename='img/server/logo.png')}}" height=60 width=60/>
