@@ -24,7 +24,7 @@ def index():
     faculties = [x.name for x in Faculties.query.all()]  #
     sub = Data.query.filter_by(name="subs").first().descr.split("; ")[1:]
     if request.method == 'GET':
-        return render_template('index.html', faculties=faculties, col_edu=range(1, 8), subs=sub,
+        return render_template('form.html', faculties=faculties, col_edu=range(1, 8), subs=sub,
                                help_text=information_extractor_f("help.txt")[0].split("\n"), id_req=0,
                                contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
                                    0].split("\n"))
@@ -171,24 +171,10 @@ def result(id_req):
             return render_template('error.html', id_req=id_req,
                                    contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
                                        0].split("\n"))
-        return render_template('result_na.html', result=result, facts=Faculties(), sub=sub, uni=Uni(),
+        return render_template('result_woa.html', result=result, facts=Faculties(), sub=sub, uni=Uni(),
                                sub_comb=Sub_Comb(), id_req=id_req, sub_combs=sub_combs, uni_sub=University_Sub(),
                                contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
-                                   0].split("\n"))
-
-
-@app.route('/login', methods=['POST', 'GET'])
-def login():
-    form = LoginForm()
-    password = form.password.data
-    if Admin.query.filter_by(password=password).all():
-        Admin.query.filter_by(id=0).first().status = 1
-        db.session.commit()
-        return redirect("/ed_title")
-    return render_template('loginform.html', form=form)
-
-
-@app.route('/help')
+                                   0].split("\n"))@app.route('/help')
 def help():
     return render_template('help.html', text=information_extractor_f("def.txt")[0].split("\n"), id_req=0,
                            contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
@@ -237,6 +223,20 @@ def help_ds(id_req):
         Sub_Comb.query.filter_by(user=id_req).delete()
         db.session.commit()
     return redirect("/help")
+
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    form = LoginForm()
+    password = form.password.data
+    if Admin.query.filter_by(password=password).all():
+        Admin.query.filter_by(id=0).first().status = 1
+        db.session.commit()
+        return redirect("/ed_title")
+    return render_template('loginform.html', form=form)
+
+
+
 
 
 if __name__ == '__main__':
