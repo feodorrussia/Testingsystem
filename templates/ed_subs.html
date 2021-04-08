@@ -2,11 +2,11 @@
 
 
 {% block tools %}
+    <a href="/add_sub" ><h4 style="padding-right: 20px">Добавить предмет</h4></a>
     {% for i in sub %}
         <div class="title_tools" style="padding:10px">
             <textarea name="name_{{i.id}}" rows="1" cols="20" wrap="virtual" style="height:100%;width: 300px;margin-right: 20px">{{i.name}}</textarea>
-            <a href="/del_sub/{{i.id}}" onclick="f_del()"><h4 style="padding-right: 20px">Удалить предмет</h4></a>
+            <a href="/del_sub/{{i.id}}" onclick="f_del()"><h4 style="padding-right: 20px;margin-bottom:10px">Удалить предмет</h4></a>
         </div>
     {% endfor %}
-    <a href="/add_sub" ><h4 style="padding-right: 20px">Добавить предмет</h4></a>
 {% endblock %}
