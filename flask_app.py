@@ -379,7 +379,7 @@ def add_uni(step):
                     db.session.add(uni_ach)
                     db.session.commit()
             return redirect(f"/ed_uni/{id_uni}")
-        return render_template('add_uni.html', step=step + 1, sub=subs, ind_ach=ind_achs)
+        return redirect(f"/add_uni/{step+1}")
 
 
 @app.route('/del_uni/<int:id_uni>')
