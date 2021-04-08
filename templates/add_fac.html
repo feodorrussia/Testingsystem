@@ -1,0 +1,20 @@
+{% extends "ed_index.html" %}
+
+
+{% block tools %}
+    <div class="title_tools" style="padding:10px;margin-left:10px">
+        <input class="form-control" type="text" style="align-self:right;margin :10px 0 10px 10px;width:200px;" name="name" autocomplete="off"  placeholder="Название факультета">
+        <input class="form-control" type="text" list="unis" style="align-self:right;margin :10px 0 10px 10px;width:200px;" name="uni" autocomplete="off" id="1" placeholder="Унивеситет">
+        <datalist id="unis">
+            {% for j in unis%}
+                <option>{{j.name}}</option>
+            {%endfor%}
+        </datalist>
+        <input class="form-control" type="number" max="310" min="0" style="align-self:right;margin :10px 0 10px 10px;width:170px;" name="passing_score" autocomplete="off" placeholder="Проходной балл">
+        <input class="form-control" type="text" style="align-self:right;margin :10px 0 10px 10px;width:300px;" name="fac_link" autocomplete="off"  placeholder="Ссылка на сайт факультета">
+    </div>
+    <h4 style="padding: 20px">Предметы:</h4>
+    {% for j in subs%}
+        <p style="font-size:14px;display: block;padding:0 10px;margin:0;width: max-content; max-width: 20vw"><input style="margin-top:0px;" name="sub_{{j.id}}" type="radio" value="yes">{{j.name}}</p>
+    {%endfor%}
+{% endblock %}

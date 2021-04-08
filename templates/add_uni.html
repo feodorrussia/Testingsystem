@@ -1,0 +1,28 @@
+{% extends "ed_index.html" %}
+
+
+{% block tools %}
+    {% if step == 1 %}
+        <div class="title_tools" style="padding:10px">
+            <textarea name="name" rows="2" cols="20" wrap="virtual" style="height:100%;width: 300px;margin-right: 20px"></textarea>
+            <input class="form-control" type="number" max="10" min="0" style="align-self:right;margin: 0;width:80px;" name="point" autocomplete="off" placeholder="point">
+            <textarea name="faculties" rows="5" cols="70" wrap="virtual" style="width: 400px;margin-left: 20px"></textarea>
+        </div>
+    {% endif %}
+    {% if step == 2 %}
+        {%for i in sub%}
+            <div class="title_tools" style="padding:10px">
+                <h4 style="padding: 0 20px">{{i.name}}: </h4>
+                <input class="form-control" type="number" max="10" min="0" style="align-self:right;margin: 0;width:80px;" name="limit_score_{{i.id}}" autocomplete="off" placeholder="limit_score">
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% if step == 3 %}
+        {%for i in sub%}
+            <div class="title_tools" style="padding:10px">
+                <h4 style="padding: 0 20px">{{i.name}}: </h4>
+                <input class="form-control" type="number" max="10" min="0" style="align-self:right;margin: 0;width:80px;" name="limit_score_{{i.id}}" autocomplete="off" placeholder="limit_score">
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
