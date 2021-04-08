@@ -359,6 +359,7 @@ def add_uni(step):
             uni = Universities(name=name, com_link=com_link)
             db.session.add(uni)
             db.session.commit()
+            global id_uni
             id_uni = Uni.query.filter_by(name=name).first().id
             for i in faculties.split("\n"):
                 if i != "":
@@ -373,7 +374,7 @@ def add_uni(step):
                 db.session.commit()
         if step == 3:
             for i in ind_achs:
-                if i != 0:
+                if i:
                     point = request.form.get(f'point_{i.id}')
                     uni_ach = University_Ach(id_uni=id_uni, id_ach=i.id, point=point, descr="")
                     db.session.add(uni_ach)
