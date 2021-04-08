@@ -374,8 +374,8 @@ def add_uni(step):
                 db.session.commit()
         if step == 3:
             for i in ind_achs:
-                if i:
-                    point = request.form.get(f'point_{i.id}')
+                point = request.form.get(f'point_{i.id}')
+                if point:
                     uni_ach = University_Ach(id_uni=id_uni, id_ach=i.id, point=point, descr="")
                     db.session.add(uni_ach)
                     db.session.commit()
