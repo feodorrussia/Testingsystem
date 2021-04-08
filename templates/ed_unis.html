@@ -7,6 +7,7 @@
             <a href="/ed_uni/{{i.id}}" ><h4 style="padding-right: 20px">{{i.name}}</h4></a>
             <textarea name="{{i.id}}" rows="1" cols="70" wrap="virtual" style="">{{i.com_link}}</textarea>
         </div>
+        <a href="/del_uni/{{i.id}}" onclick="f_del()"><h4 style="padding-right: 20px">Удалить университет</h4></a>
     {% endfor %}
-    <a href="/add_uni" ><h4 style="padding-right: 20px">Добавить университет</h4></a>
+    <a href="/add_uni/1" ><h4 style="padding-right: 20px">Добавить университет</h4></a>
 {% endblock %}

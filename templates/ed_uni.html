@@ -1,0 +1,28 @@
+{% extends "ed_index.html" %}
+
+
+{% block tools %}
+    <textarea name="name" rows="1" cols="70" wrap="virtual" style="margin:50px;width: 300px">{{name}}</textarea>
+    <h4 style="padding: 20px">Факультеты:</h4>
+    {% for f in fac %}
+        <div class="title_tools" style="padding:10px">
+            <a href="/ed_fac/{{f.id}}" ><h4 style="padding-right: 20px">{{f.name}}</h4></a>
+            <textarea name="{{f.id}}" rows="1" cols="70" wrap="virtual" style="height:max-content;width: 80px;">{{f.passing_score}}</textarea>
+        </div>
+    {% endfor %}
+    <h4 style="padding: 20px">Индивидуальные достижения:</h4>
+    {% for a in ind_ach %}
+        <div class="title_tools" style="padding:10px">
+            <p style="padding-right: 20px">{{a[0].name}}</p>
+            <textarea name="point_{{a[0].id}}" rows="1" cols="70" wrap="virtual" style="height:max-content;width: 80px;margin-right:10px">{{a[1].point}}</textarea>
+            <textarea name="descr_{{a[0].id}}" rows="5" cols="70" wrap="virtual" style="height:max-content;width: 350px">{{a[1].descr}}</textarea>
+        </div>
+    {% endfor %}
+    <h4 style="padding: 20px">Пороговые баллы:</h4>
+    {% for s in sub %}
+        <div class="title_tools" style="padding:10px">
+            <h4 style="padding-right: 20px">{{s[0].name}}</h4>
+            <textarea name="lim_scr_{{s[0].id}}" rows="1" cols="70" wrap="virtual" style="height:max-content;width: 75px">{{s[1].limit_score}}</textarea>
+        </div>
+    {% endfor %}
+{% endblock %}
