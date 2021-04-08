@@ -1,0 +1,15 @@
+{% extends "ed_index.html" %}
+
+
+{% block tools %}
+    {% for i in fac %}
+        <div class="title_tools" style="padding:10px">
+            <a href="/ed_fac/{{i.id}}" ><h4 style="padding: 0 20px">{{i.name}}</h4></a>
+            <a href="/ed_uni/{{i.id_uni}}" ><h4 style="padding: 0 20px">{{uni.query.filter_by(id=i.id_uni).first().name}}</h4></a>
+            <textarea name="pas_scr_{{i.id}}" rows="1" cols="30" wrap="virtual" style="width: 80px;padding-right: 20px">{{i.passing_score}}</textarea>
+            <textarea name="f_l_{{i.id}}" rows="1" cols="50" wrap="virtual" style="width: 400px;margin-left: 20px">{{i.fac_link}}</textarea>
+        </div>
+        <a href="/del_fac/{{i.id}}" onclick="f_del()"><h4 style="padding-right: 20px">Удалить факультет</h4></a>
+    {% endfor %}
+    <a href="/add_fac" ><h4 style="padding-right: 20px">Добавить факультет</h4></a>
+{% endblock %}

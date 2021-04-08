@@ -1,0 +1,13 @@
+{% extends "ed_index.html" %}
+
+
+{% block tools %}
+    {% for i in ind_ach %}
+        <div class="title_tools" style="padding:10px">
+            <textarea name="name_{{i.id}}" rows="3" cols="20" wrap="virtual" style="height:100%;width: 300px;margin-right: 20px">{{i.name}}</textarea>
+            <textarea name="descr_{{i.id}}" rows="5" cols="70" wrap="virtual" style="width: 400px;padding-right: 20px">{{i.descr}}</textarea>
+        </div>
+        <a href="/del_ind_ach/{{i.id}}" onclick="f_del()"><h4 style="padding-right: 20px">Удалить ИД</h4></a>
+    {% endfor %}
+    <a href="/add_ind_ach" ><h4 style="padding-right: 20px">Добавить ИД</h4></a>
+{% endblock %}
