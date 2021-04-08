@@ -13,7 +13,7 @@
         {%for i in sub%}
             <div class="title_tools" style="padding:10px">
                 <h4 style="padding: 0 20px">{{i.name}}: </h4>
-                <input class="form-control" type="number" max="100" min="0" style="align-self:right;margin: 0;width:80px;" name="limit_score_{{i.id}}" autocomplete="off" placeholder="limit_score">
+                <input class="form-control" type="number" max="100" min="0" style="align-self:right;margin: 0;width:80px;" name="scr_{{i.id}}" autocomplete="off" placeholder="limit_score">
             </div>
         {% endfor %}
     {% endif %}

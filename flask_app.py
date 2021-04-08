@@ -33,7 +33,7 @@ def index():
             else:
                 subs.append(0)
         sel_faculties = []
-        for i in range(1, 6):
+        for i in range(1, 11):
             f = request.form.get(f'faculties_{i}')
             if f in faculties:
                 sel_faculties.append(f)
