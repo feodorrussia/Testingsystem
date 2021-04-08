@@ -5,3 +5,5 @@ def information_extractor_f(name):
     return text.split("\n/*/\n")
 
 sub_combs = {}
+
+id_uni = -1
