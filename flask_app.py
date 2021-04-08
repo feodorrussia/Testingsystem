@@ -361,7 +361,7 @@ def add_uni(step):
             db.session.commit()
             id_uni = Uni.query.filter_by(name=name).first().id
             for i in faculties.split("\n"):
-                if i!="":
+                if i != "":
                     fac = Faculties(name=(name + " " + i), id_uni=id_uni, passing_score=0, subjects="0", fac_link="/")
                     db.session.add(fac)
                     db.session.commit()
@@ -373,10 +373,11 @@ def add_uni(step):
                 db.session.commit()
         if step == 3:
             for i in ind_achs:
-                point = request.form.get(f'point_{i.id}')
-                uni_ach = University_Ach(id_uni=id_uni, id_ach=i.id, point=point, descr="")
-                db.session.add(uni_ach)
-                db.session.commit()
+                if i != 0:
+                    point = request.form.get(f'point_{i.id}')
+                    uni_ach = University_Ach(id_uni=id_uni, id_ach=i.id, point=point, descr="")
+                    db.session.add(uni_ach)
+                    db.session.commit()
             return redirect(f"/ed_uni/{id_uni}")
         return render_template('add_uni.html', step=step + 1)
 
