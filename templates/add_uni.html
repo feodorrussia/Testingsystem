@@ -20,7 +20,8 @@
     {% if step == 3 %}
         {%for i in ind_ach%}
             <div class="title_tools" style="padding:10px">
-                <h4 style="padding: 0 20px">{{i.name}}: </h4>
+                <p style="padding: 0 20px">{{i.name}}: </p>
+                <p style="padding: 0 20px">{{i.descr}}: </p>
                 <input class="form-control" type="number" max="10" min="0" style="align-self:right;margin: 0;width:80px;" name="point_{{i.id}}" autocomplete="off" placeholder="point">
             </div>
         {% endfor %}
