@@ -25,7 +25,7 @@ class Faculties(db.Model):
 class Universities(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False)
-    com_link = db.Column(db.String(200), unique=True, nullable=False)
+    com_link = db.Column(db.String(200), unique=False, nullable=False)
 
 
 class Individual_achivements(db.Model):

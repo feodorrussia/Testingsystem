@@ -361,9 +361,10 @@ def add_uni(step):
             db.session.commit()
             id_uni = Uni.query.filter_by(name=name).first().id
             for i in faculties.split("\n"):
-                fac = Universities(name=(name + " " + i), id_uni=id, passing_score=0, subjects="0", fac_link="/")
-                db.session.add(fac)
-                db.session.commit()
+                if i!="":
+                    fac = Faculties(name=(name + " " + i), id_uni=id_uni, passing_score=0, subjects="0", fac_link="/")
+                    db.session.add(fac)
+                    db.session.commit()
         if step == 2:
             for i in subs:
                 limit_score = request.form.get(f'scr_{i.id}')
