@@ -8,6 +8,8 @@ from db import Universities as Uni
 from little_functions import *
 from login import LoginForm
 
+id_uni = -1
+
 
 @app.route('/', methods=['POST', 'GET'])
 @app.route('/index', methods=['POST', 'GET'])
@@ -359,7 +361,6 @@ def add_uni(step):
             uni = Universities(name=name, com_link=com_link)
             db.session.add(uni)
             db.session.commit()
-            global id_uni
             id_uni = Uni.query.filter_by(name=name).first().id
             for i in faculties.split("\n"):
                 if i != "":
