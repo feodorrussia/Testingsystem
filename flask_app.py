@@ -367,7 +367,7 @@ def add_uni(step):
             print(id_uni)
             for i in faculties.split("\n"):
                 if i != "":
-                    fac = Faculties(name=(name + " " + i), id_uni=id_uni, passing_score=0, subjects="0", fac_link="/")
+                    fac = Faculties(name=(name + " " + i), id_uni=id_uni, passing_score=0, subjects="1", fac_link="/")
                     db.session.add(fac)
                     db.session.commit()
         if step == 2:
