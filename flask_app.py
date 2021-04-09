@@ -37,6 +37,7 @@ def index():
             f = request.form.get(f'faculties_{i}')
             if f in faculties:
                 sel_faculties.append(f)
+            print(f, f in faculties)
         if request.form.get('mode') == "manual" and sel_faculties != []:
             results = {}
             for sel_faculty in sel_faculties:
@@ -48,13 +49,13 @@ def index():
                         result = 0
                         flag = 1
                         for i in req_subs:
-                            ege_score = subs[int(i)-1]
+                            ege_score = subs[int(i) - 1]
                             limit_score = University_Sub.query.filter_by(id_uni=fac.id_uni).filter_by(
                                 id_sub=i).first().limit_score
                             if limit_score <= ege_score:
-                                score = f"g{sub[int(i)-1][:2]}"
+                                score = f"g{sub[int(i) - 1][:2]}"
                             else:
-                                score = f"r{sub[int(i)-1][:2]}"
+                                score = f"r{sub[int(i) - 1][:2]}"
                                 flag = 0
                             sub_comb = Sub_Comb.query.filter_by(id_fac=fac.id).filter_by(
                                 subs=fac.subjects).filter_by(user=id_req).first()
@@ -97,13 +98,13 @@ def index():
                     result = 0
                     flag = 1
                     for i in req_subs:
-                        ege_score = subs[int(i)-1]
+                        ege_score = subs[int(i) - 1]
                         limit_score = University_Sub.query.filter_by(id_uni=fac.id_uni).filter_by(
                             id_sub=i).first().limit_score
                         if limit_score <= ege_score:
-                            score = f"g{sub[int(i)-1][:2]}"
+                            score = f"g{sub[int(i) - 1][:2]}"
                         else:
-                            score = f"r{sub[int(i)-1][:2]}"
+                            score = f"r{sub[int(i) - 1][:2]}"
                             flag = 1
                         sub_comb = Sub_Comb.query.filter_by(id_fac=fac.id).filter_by(
                             subs=fac.subjects).filter_by(user=id_req).first()
@@ -198,7 +199,7 @@ def about_us():
 def index_ds(id_req):
     global sub_combs
     print(sub_combs)
-    if id_req != 0 and sub_combs!={}:
+    if id_req != 0 and sub_combs != {}:
         Data.query.filter_by(id=id_req).delete()
         for i in Sub_Comb.query.filter_by(user=id_req).all():
             del sub_combs[i.id]
@@ -380,12 +381,12 @@ def add_uni(step):
             id_uni = int(req_uni.descr)
             for i in ind_achs:
                 point = request.form.get(f'point_{i.id}')
-                if point and point!="":
+                if point and point != "":
                     uni_ach = University_Ach(id_uni=id_uni, id_ach=i.id, point=point, descr="")
                     db.session.add(uni_ach)
                     db.session.commit()
             return redirect(f"/ed_uni/{id_uni}")
-        return redirect(f"/add_uni/{step+1}")
+        return redirect(f"/add_uni/{step + 1}")
 
 
 @app.route('/del_uni/<int:id_uni>')
@@ -454,7 +455,7 @@ def add_fac():
     if request.method == 'GET':
         return render_template('add_fac.html', subs=subs, unis=unis)
     elif request.method == 'POST':
-        name = request.form.get('name')
+        name = request.form.get('name').strip()
         uni = request.form.get('uni')
         id_uni = Uni.query.filter_by(name=request.form.get('uni')).first().id
         passing_score = request.form.get('passing_score')
@@ -464,7 +465,8 @@ def add_fac():
             s = request.form.get(f'sub_{i.id}')
             if s == "yes":
                 sub.append(str(i.id))
-        fac = Faculties(name=uni + " " + name, id_uni=id_uni, passing_score=passing_score, subjects=" ".join(sub), fac_link=fac_link)
+        fac = Faculties(name=uni + " " + name, id_uni=id_uni, passing_score=passing_score, subjects=" ".join(sub),
+                        fac_link=fac_link)
         db.session.add(fac)
         db.session.commit()
         id = Faculties.query.filter_by(name=uni + " " + name).first().id
