@@ -150,6 +150,7 @@ def result(id_req):
     global sub_combs
     sub = Data.query.filter_by(name="subs").first().descr.split("; ")
     req = Data.query.filter_by(id=f'{id_req}').first().descr
+    print(University_Sub.query.filter_by(id_uni=Faculties.query.filter_by(id=8).first().id).all())
     if req[0] == "1":
         result = sorted([list(map(int, i.split())) for i in req[1:].split("; ")], key=lambda x: -int(x[1]))
         return render_template('result_wia.html', result=result, facts=Faculties(), sub=sub, uni=Uni(),

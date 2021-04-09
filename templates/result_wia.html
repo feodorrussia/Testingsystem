@@ -43,7 +43,7 @@
                 </div>
                 <a style="color: #000" title="Сайт факультета" target="_blank" href="{{facts.query.filter_by(id=i[0]).first().fac_link}}"><h2 align="center" style="width: 44vw;align-self: center;padding: 30px 3vw; margin: 0">{{facts.query.filter_by(id=i[0]).first().name}}</h2></a>
                 <div style="width: 10vw;padding: 30px 1vw;display: flex;position:relative" onmouseout="f_out('h_{{i[0]}}')" onmouseover="f_on('h_{{i[0]}}')">
-                    {% for score in sub_combs[sub_comb.query.filter_by(id_fac=i[0]).filter_by(subs=facts.query.filter_by(id=i[0]).first().subjects).filter_by(user=id_req).first().id] %}
+                    {% for score in sub_combs[sub_comb.query.filter_by(id_fac=i[0]).filter_by(subs=facts.query.filter_by(id=i[0]).all()[7].subjects).filter_by(user=id_req).first().id] %}
                             {% if score[0]=="g" %}
                                 <h2 align="center" style="align-self: center;color:#009900;padding-right: 10%; margin: 0">{{score[1:]}}</h2>
                             {% endif %}
