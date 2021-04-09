@@ -8,8 +8,6 @@ from db import Universities as Uni
 from little_functions import *
 from login import LoginForm
 
-id_uni = -1
-
 
 @app.route('/', methods=['POST', 'GET'])
 @app.route('/index', methods=['POST', 'GET'])
@@ -28,7 +26,7 @@ def index():
         db.session.add(req)
         db.session.commit()
         id_req = req.id
-        subs = [0]
+        subs = []
         for i in sub:
             if request.form.get(f'{i}') != "":
                 subs.append(int(request.form.get(f'{i}')))
@@ -50,13 +48,13 @@ def index():
                         result = 0
                         flag = 1
                         for i in req_subs:
-                            ege_score = subs[int(i)]
+                            ege_score = subs[int(i)-1]
                             limit_score = University_Sub.query.filter_by(id_uni=fac.id_uni).filter_by(
                                 id_sub=i).first().limit_score
                             if limit_score <= ege_score:
-                                score = f"g{sub[int(i) - 1][0]}"
+                                score = f"g{sub[int(i)-1][:2]}"
                             else:
-                                score = f"r{sub[int(i) - 1][0]}"
+                                score = f"r{sub[int(i)-1][:2]}"
                                 flag = 0
                             sub_comb = Sub_Comb.query.filter_by(id_fac=fac.id).filter_by(
                                 subs=fac.subjects).filter_by(user=id_req).first()
@@ -99,13 +97,13 @@ def index():
                     result = 0
                     flag = 1
                     for i in req_subs:
-                        ege_score = subs[int(i)]
+                        ege_score = subs[int(i)-1]
                         limit_score = University_Sub.query.filter_by(id_uni=fac.id_uni).filter_by(
                             id_sub=i).first().limit_score
                         if limit_score <= ege_score:
-                            score = f"g{sub[int(i) - 1][0]}"
+                            score = f"g{sub[int(i)-1][:2]}"
                         else:
-                            score = f"r{sub[int(i) - 1][0]}"
+                            score = f"r{sub[int(i)-1][:2]}"
                             flag = 1
                         sub_comb = Sub_Comb.query.filter_by(id_fac=fac.id).filter_by(
                             subs=fac.subjects).filter_by(user=id_req).first()
@@ -170,7 +168,7 @@ def result(id_req):
         return render_template('result_woa.html', result=result, facts=Faculties(), sub=sub, uni=Uni(),
                                sub_comb=Sub_Comb(), id_req=id_req, sub_combs=sub_combs, uni_sub=University_Sub(),
                                contacts=information_extractor_f(Data.query.filter_by(name="contacts").first().descr)[
-                                   0].split("\n")) @ app.route('/help')
+                                   0].split("\n"))
 
 
 @app.route('/help')
@@ -199,12 +197,12 @@ def about_us():
 def index_ds(id_req):
     global sub_combs
     print(sub_combs)
-    if id_req != 0:
+    if id_req != 0 and sub_combs!={}:
         Data.query.filter_by(id=id_req).delete()
         for i in Sub_Comb.query.filter_by(user=id_req).all():
             del sub_combs[i.id]
-        Sub_Comb.query.filter_by(user=id_req).delete()
-        db.session.commit()
+            Sub_Comb.query.filter_by(id=i.id).delete()
+            db.session.commit()
     return redirect("/index")
 
 
@@ -316,7 +314,7 @@ def ed_uni(id_uni):
             db.session.commit()
         for i in facs:
             new = request.form.get(f'{i.id}')
-            if new != i.passing_score:
+            if new != i.passing_score and new:
                 fac = db.session.query(Faculties).get(i.id)
                 fac.passing_score = int(new)
                 db.session.commit()
@@ -352,8 +350,7 @@ def add_uni(step):
     if request.method == 'GET':
         return render_template('add_uni.html', step=step, sub=subs, ind_ach=ind_achs)
     elif request.method == 'POST':
-        global id_uni
-        print(id_uni)
+        req_uni = db.session.query(Data).get(2)
         if step == 1:
             name = request.form.get(f'name')
             faculties = request.form.get(f'faculties')
@@ -362,21 +359,27 @@ def add_uni(step):
             db.session.add(uni)
             db.session.commit()
             id_uni = Uni.query.filter_by(name=name).first().id
+            req_uni = db.session.query(Data).get(2)
+            req_uni.descr = str(id_uni)
+            db.session.commit()
+            print(id_uni)
             for i in faculties.split("\n"):
                 if i != "":
                     fac = Faculties(name=(name + " " + i), id_uni=id_uni, passing_score=0, subjects="0", fac_link="/")
                     db.session.add(fac)
                     db.session.commit()
         if step == 2:
+            id_uni = int(req_uni.descr)
             for i in subs:
                 limit_score = request.form.get(f'scr_{i.id}')
                 uni_sub = University_Sub(id_uni=id_uni, id_sub=i.id, limit_score=limit_score)
                 db.session.add(uni_sub)
                 db.session.commit()
         if step == 3:
+            id_uni = int(req_uni.descr)
             for i in ind_achs:
                 point = request.form.get(f'point_{i.id}')
-                if point:
+                if point and point!="":
                     uni_ach = University_Ach(id_uni=id_uni, id_ach=i.id, point=point, descr="")
                     db.session.add(uni_ach)
                     db.session.commit()

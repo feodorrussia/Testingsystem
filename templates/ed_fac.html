@@ -3,9 +3,9 @@
 
 {% block tools %}
     <div class="title_tools" style="padding:10px;margin-left:50px">
-        <textarea name="name" rows="1" cols="20" wrap="virtual" style="height:100%;width: 250px;padding-right: 20px">{{fac.name}}</textarea>
+        <textarea name="name" rows="1" cols="20" wrap="virtual" style="height:max-content;width: 300px;padding-right: 20px">{{fac.name}}</textarea>
         <a href="/ed_uni/{{uni.query.filter_by(id=fac.id_uni).first().id}}" ><h4 style="padding: 0 20px">{{uni.query.filter_by(id=fac.id_uni).first().name}}</h4></a>
-        <textarea name="pas_scr" rows="1" cols="30" wrap="virtual" style="width: 80px;padding-right: 20px">{{fac.passing_score}}</textarea>
+        <textarea name="pas_scr" rows="1" cols="30" wrap="virtual" style="height:max-content;width: 80px;padding-right: 20px">{{fac.passing_score}}</textarea>
     </div>
     <h4 style="padding: 20px">Предметы:</h4>
     <textarea name="subs" rows="5" cols="30" wrap="virtual" style="width: 300px;padding-right: 20px">{{subs}}</textarea>
