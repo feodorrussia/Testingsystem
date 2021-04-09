@@ -53,7 +53,7 @@
                 <div id="h_{{i[0]}}" class="help_flash">
                     <p style="font-size:12px;text-align:center;width:100%;margin:0">Для данного факультета</p>
                     <p style="font-size:12px;text-align:center;width:100%;margin:0">минимальный балл по ЕГЭ:</p>
-                    <p style="font-size:14px;text-align:center;width:100%;margin:0"> {{uni_sub.query.filter_by(id_uni=facts.query.filter_by(id=i[0]).first().id_uni).first().limit_score}} /100</p>
+                    <p style="font-size:14px;text-align:center;width:100%;margin:0"> {{uni_sub.query.filter_by(id_uni=facts.query.filter_by(id=i[0]).all()[7].id_uni).first().limit_score}} /100</p>
                 </div>
             </div>
             {% if facts.query.filter_by(id=i[0]).first().passing_score <= i[1] and sub_comb.query.filter_by(id_fac=i[0]).filter_by(subs=facts.query.filter_by(id=i[0]).first().subjects).filter_by(user=id_req).first().fl == 1 %}
